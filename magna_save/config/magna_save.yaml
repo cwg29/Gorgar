@@ -1,0 +1,36 @@
+#config_version=6
+##! mode: magna_save
+
+#GORGAR
+
+
+mode:
+    start_events: start_mode_magna_save
+    stop_events: stop_mode_magna_save
+    priority: 400
+    #start_events: start_base #, ball_starting{ball>1}  #ball_will_start     # in normal mode use ball_started instead
+
+event_player:
+  mode_magna_save_started: initialize_magna_save
+    
+timers:
+  magna_save_magnet_left_timer:
+    start_value: 6
+    end_value: 0
+    direction: down
+    tick_interval: 1s
+    control_events:
+      - action: start
+        event: s_pit_target_active
+      - action: reset
+        event: timer_magna_save_magnet_left_timer_complete
+        
+variable_player:
+
+############ SNAKE PIT ############
+
+  s_pit_target_active:
+    score: 1000 * current_player.pf_multiplier * current_player.snake_multiplier    
+
+        
+

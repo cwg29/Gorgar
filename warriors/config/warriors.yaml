@@ -1,0 +1,225 @@
+#config_version=6
+##! mode: warriors
+
+#GORGAR
+
+### I. WARRIORS
+# Special achievements light domes in back of playield highlighting
+#  each of 4 warriors used to defeat Gorgar.
+
+
+mode:
+  start_events: start_mode_warriors
+  stop_events: stop_mode_warriors
+  priority: 900
+  
+event_player:
+  mode_warriors_started: initialize_warriors
+  #timer_tmr_warriors_coil_fire_complete: kicking_back
+  #logic_block_warriors_done: start_warriors_coil_timer
+  
+  
+#timers:
+
+  #tmr_warrior_1_show:
+  #      start_value: 0  
+  #      end_value: 4
+  #      direction: up
+  #      tick_interval: 1s
+  #      start_running: no
+  #      control_events:
+  #        - event: stars_awards_done
+  #          action: start
+  #        - event: tmr_warrior_1_show_complete
+  #          action: reset  
+
+
+      
+    
+#shot_groups:
+#  pit_target_shots:
+#    shots: pit_target_shot
+#    restart_events: initialize_pit
+#    enable_events: initialize_pit
+#    reset_events:
+#      pit_target_shots_on_complete: 6s
+    
+    
+
+
+sequences:    
+
+#### SET UP sequences and accruals to track warrior collect thru player turns.
+
+  logic_block_warrior_1_collected:
+    events:
+      - stars_awards_done      
+    events_when_complete: logic_block_warrior_1_collected_done
+    reset_on_complete: false
+    disable_on_complete: false
+    persist_state: true
+    
+  logic_block_warrior_2_collected:
+    events:
+      - top_awards_done      
+    events_when_complete: logic_block_warrior_2_collected_done
+    reset_on_complete: false
+    disable_on_complete: false
+    persist_state: true
+    
+  logic_block_warrior_3_collected:
+    events:
+      - snake_pit_attack_1_awards_done   
+    events_when_complete: logic_block_warrior_3_collected_done
+    reset_on_complete: false
+    disable_on_complete: false
+    persist_state: true
+    
+  logic_block_warrior_4_collected:
+    events:
+      - lwr_awards_done   
+    events_when_complete: logic_block_warrior_4_collected_done
+    reset_on_complete: false
+    disable_on_complete: false
+    persist_state: true
+    
+accruals:
+    
+  accrual_block_warrior_all_collected:
+    events:
+      - logic_block_warrior_1_collected_done
+      - logic_block_warrior_2_collected_done
+      - logic_block_warrior_3_collected_done
+      - logic_block_warrior_4_collected_done
+    events_when_complete: accrual_block_warrior_all_collected_done
+    reset_on_complete: true
+    disable_on_complete: false
+    persist_state: true
+    
+    
+    
+    
+
+        
+        
+show_player:
+
+  logic_block_warrior_4_collected_done:  #lwr_awards_done: #AWARD - GOR lit
+    color_warriors_cycle_show:
+      loops: -1
+      speed: 5
+      priority: 12
+      show_tokens:
+        led: led_warrior_4 # THOR
+        color1: red
+        color2: green
+        color3: blue
+        color4: purple
+        
+  logic_block_warrior_2_collected_done:  #top_awards_done: #AWARD - GAR lit
+    color_warriors_cycle_show_2:
+      loops: -1
+      speed: 5
+      priority: 13
+      show_tokens:
+        led: led_warrior_2 # SKARI
+        color1: red
+        color2: green
+        color3: blue
+        color4: purple
+        
+  logic_block_warrior_1_collected_done:  #stars_awards_done: #AWARD - BOTH STARS lit
+    color_warriors_cycle_show_3:
+      loops: -1
+      speed: 5
+      priority: 14
+      show_tokens:
+        led: led_warrior_1 # CENTAUR
+        color1: red
+        color2: green
+        color3: blue
+        color4: purple
+        
+  logic_block_warrior_3_collected_done:  #snake_pit_attack_1_awards_done: #AWARD - SNAKE PIT attack award complete
+    color_warriors_cycle_show_4:
+      loops: -1
+      speed: 5
+      priority: 15
+      show_tokens:
+        led: led_warrior_3 # ODIN
+        color1: red
+        color2: green
+        color3: blue
+        color4: purple
+        
+  accrual_block_warrior_all_collected_done: #AWARD - all warriors complete
+    color_warriors_cycle_show:
+      loops: -1
+      speed: 5
+      priority: 15
+      show_tokens:
+        led: led_warriors # ALL
+        color1: red
+        color2: green
+        color3: blue
+        color4: purple
+        
+  #warriors_done:
+  #  color_warriors_all_cycle_show:
+  #    action: stop
+      
+#  timer_tmr_warriors_coil_fire_complete:    
+#    color_warriors_cycle_show:
+#      loops: 3
+#      speed: 10
+#      priority: 14
+#      show_tokens:
+#        led: led_blade_left, led_blade_right  
+#        color1: blue
+#        color2: green
+
+#light_player:
+
+#  player_warrior_1_multiplier:{value==1}:
+#    l_led97:  #led_warrior_1
+#            color: blue
+#            fade: 500ms
+#  player_warrior_2_multiplier:{value==1}:
+#    l_led98:  #led_warrior_2
+#            color: red
+#            fade: 500ms
+#  player_warrior_3_multiplier:{value==1}:
+#    l_led99:  #led_warrior_3
+#            color: yellow
+#            fade: 500ms
+#  player_warrior_4_multiplier:{value==1}:
+#    l_led100:  #led_warrior_4
+#            color: purple
+#            fade: 500ms
+            
+#variable_player:
+
+#  logic_block_warrior_1_collected_done:
+#    warrior_1_multiplier:
+#      int: 1
+#      action: set
+#  logic_block_warrior_2_collected_done:
+#    warrior_2_multiplier:
+#     int: 1
+#      action: set
+#  logic_block_warrior_3_collected_done:
+#    warrior_3_multiplier:
+#      int: 1
+#      action: set
+#  logic_block_warrior_4_collected_done:
+#    warrior_4_multiplier:
+#      int: 1
+#      action: set
+
+      
+
+        
+
+        
+
+        

@@ -1,0 +1,168 @@
+#config_version=5
+##! mode: lane_change
+# in modes/lane_change
+
+mode:
+  start_events: start_mode_lane_change
+  stop_events: stop_mode_lane_change
+  priority: 200
+
+shot_groups:
+  lane_change:
+    shots: lane_change_1, lane_change_2, lane_change_3, lane_change_4
+    reset_events:
+      lane_change_on_complete: 6s
+    rotate_left_events: s_left_flipper_active
+    rotate_right_events: s_right_flipper_active
+    
+counters:
+  lane_change_mltp_complete_count:
+    count_events: lane_change_on_complete
+    events_when_hit: mltp_lanes_done
+    starting_count: 0
+    direction: up
+    persist_state: false
+
+shots:
+  lane_change_1:
+    switch: s_ro_upper_1
+    profile: lane_change_profile
+    show_tokens:
+      led: led_top_ro_1
+  lane_change_2:
+    switch: s_ro_upper_2
+    profile: lane_change_profile
+    show_tokens:
+      led: led_top_ro_2
+  lane_change_3:
+    switch: s_ro_upper_3
+    profile: lane_change_profile
+    show_tokens:
+      led: led_top_ro_3
+  lane_change_4:
+    switch: s_ro_upper_4
+    profile: lane_change_profile
+    show_tokens:
+      led: led_top_ro_4
+
+shot_profiles:
+  lane_change_profile:
+    states:
+      - name: off
+        show: off
+      - name: on
+        show: on
+
+show_player:
+  lane_change_on_complete:
+    flash:
+      loops: 8
+      speed: 4
+      show_tokens:
+        lights: Mltp_Lanes
+  #mltp_lanes_done{count==2}:
+    #Playfield_2x_on:
+    #show_tokens:
+      #lights: led_2x
+  #mltp_lanes_done{count==3}:
+    #led_3x_on:
+      #show_tokens:
+        #lights: led_2x, led_3x        
+light_player:
+  mltp_lanes_done{count==1}:
+        l_led2:  #led_2x
+            color: green
+            fade: 500ms
+  mltp_lanes_done{count==2}:
+        l_led6:  #led_3x
+            color: green
+            fade: 500ms
+
+variable_player:
+  lane_change_on_hit:
+    score: 100 * current_player.pf_multiplier
+  lane_change_off_hit:
+    score: 500 * current_player.pf_multiplier
+  lane_change_on_complete:
+    score: 5000 * current_player.pf_multiplier
+  mode_lane_change_started:
+    pf_multiplier:
+      int: 1
+      action: set
+    pf_bonus_multiplier:
+      int: 0
+      action: set
+  mltp_lanes_done{count==1}:
+    pf_multiplier:
+      int: 2
+      action: set
+    pf_bonus_multiplier:
+      int: 1
+      action: set
+    bonus_2x_mltp_lanes: 1
+    pf_bonus_3x_multiplier:
+      int: 0
+      action: set
+  mltp_lanes_done{count==2}:
+    pf_multiplier:
+      int: 3
+      action: set
+    bonus_3x_mltp_lanes: 1
+    pf_bonus_3x_multiplier:
+      int: 1
+      action: set
+  lane_change_complete:
+    score: 1000 * current_player.pf_multiplier
+    
+    
+slide_player:
+  mltp_lanes_done{count==1}:  2x_multiplier
+  mltp_lanes_done{count==2}:  3x_multiplier
+  lane_change_off_complete:
+    2x_multiplier:
+      action: remove
+      transition:
+        type: fade
+        duration: 1s
+    3x_multiplier:
+      action: remove
+      transition:
+        type: fade
+        duration: 1s
+
+#- duration: 3
+slides:
+  2x_multiplier:
+    - type: text
+      font_name: ancienttext
+      color: white
+      text: 2X Multiplier!
+      font_size: 90
+      z: 16
+      y: 40
+      anchor_y: bottom
+      expire: 10s
+    - type: video
+      video: 2x_multiplier_video
+      height: 768
+      width: 1366
+      z: 15
+      expire: 10s
+  3x_multiplier:
+    - type: text
+      font_name: ancienttext
+      color: white
+      text: 3X Multiplier!
+      font_size: 90
+      z: 16
+      y: 40
+      anchor_y: bottom
+      expire: 10s
+    - type: video
+      video: 3x_multiplier_video
+      height: 768
+      width: 1366
+      z: 15
+      expire: 10s
+
+

@@ -1,0 +1,93 @@
+#config_version=6
+##! mode: skillshot
+# in modes/skillshot
+
+mode:
+  start_events: start_mode_skillshot
+  stop_events: stop_mode_skillshot
+  priority: 1150
+
+#config:
+  #- skillshot_slides.yaml
+
+event_player:
+  skillshot_hit: stop_mode_skillshot|1s
+  skillshot_hit.1: skillshot_reset
+  playfield_active: stop_mode_skillshot|5s
+  skillshot_lit_hit: skillshot_award
+
+random_event_player:
+  mode_skillshot_started:
+    events:
+      - advance_skillshot_1
+      - advance_skillshot_2
+      - advance_skillshot_3
+
+
+shot_groups:
+  skillshot:
+    shots: skillshot_1, skillshot_2, skillshot_3
+    disable_rotation_events: s_shooter_lane_eject_inactive
+    rotate_left_events: s_left_flipper_active
+    rotate_right_events: s_right_flipper_active
+
+shots:
+  skillshot_1:
+    advance_events: advance_skillshot_1
+    profile: skillshot_profile
+    switch: s_ro_a
+    show_tokens:
+      led: led_a
+    reset_events: skillshot_reset
+  skillshot_2:
+    advance_events: advance_skillshot_2
+    profile: skillshot_profile
+    switch: s_ro_b
+    show_tokens:
+      led: led_b
+    reset_events: skillshot_reset
+  skillshot_3:
+    advance_events: advance_skillshot_3
+    profile: skillshot_profile
+    switch: s_ro_c
+    show_tokens:
+      led: led_c
+    reset_events: skillshot_reset
+
+
+shot_profiles:
+  skillshot_profile:
+    advance_on_hit: false
+    states:
+      - name: off
+        show: off
+      - name: lit
+        show: flash
+
+variable_player:
+  skillshot_lit_hit:
+    score: 20000
+    
+show_player:
+  skillshot_award:
+    color_cycle_skillshot_show:
+      loops: 8
+      speed: 10
+      show_tokens:
+        led: abc_lanes, led_blade_left, led_blade_right
+        color1: green
+        color2: off
+        
+light_player:
+  #skillshot_award:
+   # abc_lanes:
+    #  color: green
+     # fade: 2500ms
+    #led_blade_left:
+    #  color: green
+    #  fade: 2500ms
+    #led_blade_right:
+    #  color: green
+    #  fade: 2500ms
+  
+

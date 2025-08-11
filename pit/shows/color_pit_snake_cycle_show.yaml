@@ -1,0 +1,161 @@
+#show_version=6
+##! show: color_pit_snake_cycle_show
+
+#################### 1st pass ####################    
+# Step 1   
+- duration: 1
+  lights:
+    led_snake_5k: green-f500ms
+
+# Step 2   
+- duration: 1
+  lights:
+    led_snake_10k: off
+    
+# Step 3   
+- duration: 1
+  lights:
+    led_snake_20k: off
+    
+# Step 4   
+- duration: 1
+  lights:
+    led_snake_30k: off
+    
+# Step 5   
+- duration: 1
+  lights:
+    led_snake_50k: off
+    
+
+
+#################### 2nd pass ####################    
+# Step 6   
+- duration: 1
+  lights:
+    led_snake_5k: off
+    
+# Step 7   
+- duration: 1
+  lights:
+    led_snake_10k: green-f500ms
+    
+# Step 8   
+- duration: 1
+  lights:
+    led_snake_20k: off
+    
+# Step 9   
+- duration: 1
+  lights:
+    led_snake_30k: off
+    
+# Step 10   
+- duration: 1
+  lights:
+    led_snake_50k: off
+    
+#################### 3rd pass ####################    
+# Step 11   
+- duration: 1
+  lights:
+    led_snake_5k: off
+    
+# Step 12   
+- duration: 1
+  lights:
+    led_snake_10k: off
+    
+# Step 13   
+- duration: 1
+  lights:
+    led_snake_20k: green-f500ms
+    
+# Step 14   
+- duration: 1
+  lights:
+    led_snake_30k: off
+    
+# Step 15   
+- duration: 1
+  lights:
+    led_snake_50k: off
+    
+#################### 4th pass ####################    
+# Step 16   
+- duration: 1
+  lights:
+    led_snake_5k: off
+    
+# Step 17   
+- duration: 1
+  lights:
+    led_snake_10k: off
+    
+# Step 18   
+- duration: 1
+  lights:
+    led_snake_20k: off
+    
+# Step 19   
+- duration: 1
+  lights:
+    led_snake_30k: green-f500ms
+    
+# Step 20   
+- duration: 1
+  lights:
+    led_snake_50k: off
+    
+#################### 5th pass ####################    
+# Step 21   
+- duration: 1
+  lights:
+    led_snake_5k: off
+    
+# Step 22   
+- duration: 1
+  lights:
+    led_snake_10k: off
+    
+# Step 23   
+- duration: 1
+  lights:
+    led_snake_20k: off
+    
+# Step 24   
+- duration: 1
+  lights:
+    led_snake_30k: off
+    
+# Step 25   
+- duration: 1
+  lights:
+    led_snake_50k: green-f500ms
+    
+#################### 5th pass ####################    
+# Step 26   
+- duration: 1
+  lights:
+    led_snake_5k: off
+    
+# Step 27   
+- duration: 1
+  lights:
+    led_snake_10k: off
+    
+# Step 28   
+- duration: 1
+  lights:
+    led_snake_20k: off
+    
+# Step 29   
+- duration: 1
+  lights:
+    led_snake_30k: off
+    
+# Step 30   
+- duration: 1
+  lights:
+    led_snake_50k: off
+    

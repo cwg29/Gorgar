@@ -1,0 +1,351 @@
+#config_version=6
+##! mode: fire_targets
+
+#GORGAR
+
+### I. TARGETS 1 thru 4 FEATURE
+# Making 1-2-3-4 lites PIT for 50,000 & lites next STAR.
+# When both STARS are lit, lites arrows alternativly for SPECIAL. 
+# Making "D" and "E" spots 1-2-3-4 
+# 
+
+mode:
+  start_events: start_mode_fire_targets
+  stop_events: stop_mode_fire_targets
+  priority: 750
+  
+event_player:
+  mode_fire_targets_started: initialize_fire_targets
+  fire_target_1_count_hit{count==1}: fire_target_1_shot_hit_once
+  fire_target_2_count_hit{count==1}: fire_target_2_shot_hit_once
+  fire_target_3_count_hit{count==1}: fire_target_3_shot_hit_once
+  fire_target_4_count_hit{count==1}: fire_target_4_shot_hit_once
+  fire_target_1_count_hit{count==2}: fire_target_1_shot_hit_twice
+  fire_target_2_count_hit{count==2}: fire_target_2_shot_hit_twice
+  fire_target_3_count_hit{count==2}: fire_target_3_shot_hit_twice
+  fire_target_4_count_hit{count==2}: fire_target_4_shot_hit_twice
+  fire_targets_shots_count_hit{count==1}: pit_attack_gorgar_1
+  fire_targets_shots_count_hit{count==2}: pit_attack_gorgar_2
+  accrual_fire_target_shots_set_1_done: award_fire_shots_1_done
+  logic_block_fire_target_shots_set_2_done: award_fire_shots_2_done
+  
+  timer_tmr_fire_target_arrow_shot_ready_tick{ticks == 1}: arrow_1_hit_ready
+  timer_tmr_fire_target_arrow_shot_ready_tick{ticks == 2}: arrow_2_hit_ready
+  timer_tmr_fire_target_arrow_shot_ready_tick{ticks == 3}: arrow_3_hit_ready
+  timer_tmr_fire_target_arrow_shot_ready_tick{ticks == 4}: arrow_4_hit_ready
+  
+  logic_block_fire_target_attack_0_done: fire_target_shot_attack_0
+  logic_block_fire_target_attack_1_done: fire_target_shot_attack_1
+  
+timers:
+
+  tmr_fire_target_arrow_shot_ready:
+        start_value: 1  
+        end_value: 5
+        direction: up
+        tick_interval: 11s
+        start_running: no
+        restart_on_complete: true
+        control_events:
+          - event: stars_awards_done
+            action: start
+          - event: timer_tmr_fire_target_arrow_shot_ready_complete
+            action: reset  
+
+accruals:
+  accrual_fire_target_shots_set_1:
+    events:
+      - fire_targets_shots_complete      
+    events_when_complete: accrual_fire_target_shots_set_1_done
+    
+
+    
+sequences:
+
+  logic_block_fire_target_attack_0:
+    events:
+      #- star_1_started
+      - fire_targets_shots_hit
+      
+    events_when_complete: logic_block_fire_target_attack_0_done
+    reset_on_complete: true
+    disable_on_complete: false
+    disable_events: accrual_fire_target_shots_set_1_done
+    persist_state: false
+    
+
+  logic_block_fire_target_attack_1:
+    events:
+      - award_fire_shots_1_done
+      - fire_targets_shots_hit
+      
+    events_when_complete: logic_block_fire_target_attack_1_done
+    reset_on_complete: true
+    disable_on_complete: false
+    persist_state: false
+    
+
+  logic_block_fire_target_shots_set_2:
+    events:
+      - accrual_fire_target_shots_set_1_done
+      - fire_targets_shots_complete      
+      
+    events_when_complete: logic_block_fire_target_shots_set_2_done
+    reset_on_complete: true
+    disable_on_complete: false
+    #disable_events: pit_attack_gorgar_1
+    persist_state: false
+    
+          
+
+
+counters:
+  fire_target_1_shot_count:
+    count_events: fire_target_1_shot_hit
+    events_when_hit: fire_target_1_count_hit
+    starting_count: 0
+    direction: up
+    count_complete_value: 3
+    persist_state: false
+    reset_on_complete: false
+    events_when_complete: fire_target_1_shot_hit_twice
+    restart_events:
+      - ball_started
+      - initialize_fire_targets
+      
+  fire_target_2_shot_count:
+    count_events: fire_target_2_shot_hit
+    events_when_hit: fire_target_2_count_hit
+    starting_count: 0
+    direction: up
+    count_complete_value: 2
+    persist_state: false
+    reset_on_complete: false
+    events_when_complete: fire_target_2_shot_hit_twice
+    restart_events:
+      - ball_started
+      - initialize_fire_targets
+      
+  fire_target_3_shot_count:
+    count_events: fire_target_3_shot_hit
+    events_when_hit: fire_target_3_count_hit
+    starting_count: 0
+    direction: up
+    count_complete_value: 2
+    persist_state: false
+    reset_on_complete: false
+    events_when_complete: fire_target_3_shot_hit_twice
+    restart_events:
+      - ball_started
+      - initialize_fire_targets
+      
+  fire_target_4_shot_count:
+    count_events: fire_target_4_shot_hit
+    events_when_hit: fire_target_4_count_hit
+    starting_count: 0
+    direction: up
+    count_complete_value: 2
+    persist_state: false
+    reset_on_complete: false
+    events_when_complete: fire_target_4_shot_hit_twice
+    restart_events:
+      - ball_started
+      - initialize_fire_targets
+      
+  fire_target_shots_count:
+    count_events: fire_targets_shots_complete
+    events_when_hit: fire_targets_shots_count_hit
+    starting_count: 0
+    direction: up
+    count_complete_value: 2
+    persist_state: true
+    reset_on_complete: false
+    events_when_complete: fire_targets_shots_hit_twice
+    restart_events:
+      - ball_started
+      - initialize_fire_targets
+    
+shot_groups:
+  fire_targets_shots:
+    shots: fire_target_1_shot, fire_target_2_shot, fire_target_3_shot, fire_target_4_shot
+    restart_events: initialize_fire_targets, fire_targets_shots_complete
+    enable_events: initialize_fire_targets
+    reset_events:
+      fire_targets_shots_on_complete: 2s
+    
+    
+shots:
+  fire_target_1_shot:
+    switch: s_target_1
+    #enable_events: mode_ball_starting_show_ended
+    #disable_events: start_ball_starting_show
+    profile: flash_2
+    
+  fire_target_2_shot:
+    switch: s_target_2
+    #enable_events: mode_ball_starting_show_ended
+    #disable_events: start_ball_starting_show
+    profile: flash_2
+    
+  fire_target_3_shot:
+    switch: s_target_3
+    #enable_events: mode_ball_starting_show_ended
+    #disable_events: start_ball_starting_show
+    profile: flash_2
+    
+  fire_target_4_shot:
+    switch: s_target_4
+    #enable_events: mode_ball_starting_show_ended
+    #disable_events: start_ball_starting_show
+    profile: flash_2
+    
+shot_profiles:
+  flash_2:
+    states:
+      - name: unlit
+        show: "off"
+      - name: lit
+        show: "flash"
+        
+        
+show_player:
+
+  fire_target_1_shot_hit_twice:
+    color_target_cycle_show:
+      loops: -1
+      speed: 10
+      priority: 12
+      show_tokens:
+        led: led_target_1_hit
+        color1: orange
+        color2: blue
+        
+  fire_target_2_shot_hit_twice:
+    color_target_cycle_show:
+      loops: -1
+      speed: 10
+      priority: 12
+      show_tokens:
+        led: led_target_4_hit
+        color1: orange
+        color2: blue
+        
+  fire_target_3_shot_hit_twice:
+    color_target_cycle_show:
+      loops: -1
+      speed: 10
+      priority: 12
+      show_tokens:
+        led: led_target_3_hit
+        color1: orange
+        color2: blue
+        
+  fire_target_4_shot_hit_twice:
+    color_target_cycle_show:
+      loops: -1
+      speed: 10
+      priority: 12
+      show_tokens:
+        led: led_target_2_hit
+        color1: orange
+        color2: blue
+        
+  arrow_1_hit_ready:
+    color_target_cycle_show:
+      loops: -1
+      speed: 10
+      priority: 12
+      show_tokens:
+        led: led_arrow_1
+        color1: red
+        color2: off
+  
+  arrow_2_hit_ready:
+    color_target_cycle_show:
+      loops: -1
+      speed: 10
+      priority: 12
+      show_tokens:
+        led: led_arrow_2
+        color1: red
+        color2: off
+        
+  arrow_3_hit_ready:
+    color_target_cycle_show:
+      loops: -1
+      speed: 10
+      priority: 12
+      show_tokens:
+        led: led_arrow_3
+        color1: red
+        color2: off
+        
+  arrow_4_hit_ready:
+    color_target_cycle_show:
+      loops: -1
+      speed: 10
+      priority: 12
+      show_tokens:
+        led: led_arrow_4
+        color1: red
+        color2: off
+        
+        
+light_player:
+
+  fire_target_1_count_hit{count==1}:
+    led_target_1_hit:
+        color: orange
+        fade: 500ms
+        
+  fire_target_2_count_hit{count==1}:
+    led_target_4_hit:
+        color: orange
+        fade: 500ms
+        
+  fire_target_3_count_hit{count==1}:
+    led_target_3_hit:
+        color: orange
+        fade: 500ms
+        
+  fire_target_4_count_hit{count==1}:
+    led_target_2_hit:
+        color: orange
+        fade: 500ms
+        
+variable_player:
+
+  fire_target_1_count_hit:
+    score: 100 * current_player.pf_multiplier
+  fire_target_2_count_hit:
+    score: 100 * current_player.pf_multiplier
+  fire_target_3_count_hit:
+    score: 100 * current_player.pf_multiplier
+  fire_target_4_count_hit:
+    score: 100 * current_player.pf_multiplier
+    
+  mode_fire_targets_started:
+    sound_fire_shots_enable:
+      int: 0
+      action: set
+  
+  award_fire_shots_1_done:
+    sound_fire_shots_enable:
+      int: 1
+      action: set  
+  
+    
+sound_player:
+
+  s_target_1_active{player_sound_fire_shots_enable==1}:
+    fire_target_sound:
+      block: true
+  s_target_2_active{player_sound_fire_shots_enable==1}:
+    fire_target_sound:
+      block: true
+  s_target_3_active{player_sound_fire_shots_enable==1}:
+    fire_target_sound:
+      block: true
+  s_target_4_active{player_sound_fire_shots_enable==1}:
+    fire_target_sound:
+      block: true

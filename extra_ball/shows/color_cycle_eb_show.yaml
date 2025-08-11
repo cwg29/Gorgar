@@ -1,0 +1,26 @@
+#show_version=6
+##! show: color_cycle_eb_show
+- time: 0
+  lights:
+    (led1): (color1)-f250ms
+    (led2): (color2)-f250ms
+    (led3): (color3)-f250ms
+    (led4): (color4)-f250ms
+- time: 1
+  lights:
+    (led2): (color1)-f250ms
+    (led3): (color2)-f250ms
+    (led4): (color3)-f250ms
+    (led1): (color4)-f250ms
+- time: 2
+  lights:
+    (led3): (color1)-f250ms
+    (led4): (color2)-f250ms
+    (led1): (color3)-f250ms
+    (led2): (color4)-f250ms
+- time: 3
+  lights:
+    (led4): (color1)-f250ms
+    (led1): (color2)-f250ms
+    (led2): (color3)-f250ms
+    (led3): (color4)-f250ms

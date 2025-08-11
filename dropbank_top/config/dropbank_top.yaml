@@ -1,0 +1,350 @@
+#config_version=6
+##! mode: dropbank_top
+
+
+#GORGAR
+
+#### DROP TARGETS ####
+
+# Completing GAR lights pop bumper for 1000.
+# Lights GAR
+# Lights outlane specials
+# Enables ball save kickback
+
+# Added timer (25 sec) to complete bank shot.
+
+
+
+### Drop Target Awards should persist between balls.  Used AWARDS to track  ###
+
+
+
+
+
+mode:
+  start_events: start_mode_dropbank_top
+  stop_events: stop_mode_dropbank_top
+  priority: 600
+  
+event_player:
+  mode_dropbank_top_started: initialize_dropbank_top
+  
+  ############ upper left drop bank ############
+  player_shot_upr_drop_any: upr_dropbank_shot_started
+  timer_tmr_reset_drop_bank_upr_complete: upr_dropbank_shot_timeout
+  s_upr_drop_target_1_active: upr_bank_hit
+  s_upr_drop_target_2_active: upr_bank_hit
+  s_upr_drop_target_3_active: upr_bank_hit
+  
+  drop_bank_upr_count_hit{count==1}: upr_drop_bank_pop_bns_1
+  drop_bank_upr_count_hit{count==2}: upr_drop_bank_pop_bns_2
+  drop_bank_upr_count_hit{count==3}: upr_drop_bank_pop_bns_3
+  drop_bank_upr_count_hit{count==4}: upr_drop_bank_pop_bns_4
+  drop_bank_upr_count_hit{count==5}: upr_drop_bank_pop_bns_5
+  
+  drop_target_bank_bank_upr_down: gor_bank_achieved
+  
+  
+  
+  
+  
+shot_groups:
+  uppper_dropbank_shots:
+    shots: upr_drop_1, upr_drop_2, upr_drop_3
+    restart_events: drop_target_bank_bank_upr_up
+    enable_events: initialize_dropbank_top
+    reset_events:
+      lower_dropbank_shots_on_complete: 2s
+      
+
+    
+shots:
+    
+  upr_drop_1:
+    switch: s_upr_drop_target_1
+    profile: drop_sequence_2
+    restart_events: drop_target_bank_bank_upr_up
+
+  upr_drop_2:
+    switch: s_upr_drop_target_2
+    profile: drop_sequence_2
+    restart_events: drop_target_bank_bank_upr_up
+
+  upr_drop_3:
+    switch: s_upr_drop_target_3
+    profile: drop_sequence_2
+    restart_events: drop_target_bank_bank_upr_up
+    
+  upr_drop_any:
+    switch: s_upr_drop_target_1, s_upr_drop_target_2, s_upr_drop_target_3
+    
+    
+
+    
+
+      
+shot_profiles:
+  drop_sequence_2:
+    #advance_on_hit: false
+    states:
+      - name: off
+        show: off
+      - name: lit
+        show: flash
+      - name: down
+        show: on
+  bank_profile_2:
+    states:
+      - name: drop1
+        show: on
+      - name: drop2
+        show: on
+      - name: drop3
+        show: on
+    
+      
+
+timers:
+
+############ lower left drop bank ############
+######### Timed drop bank shot ################  
+  tmr_reset_drop_bank_upr:
+        start_value: 0  #original game options Funtion 33: 6-15 seconds
+        end_value: 60
+        direction: up
+        tick_interval: 1s
+        start_running: no
+        control_events:
+          - event: upr_bank_hit #upr_blu_dropbank_shot_started
+            action: start
+          - event: upr_bank_hit
+            action: restart       
+        #  - event: drop_target_bank_left_bank_upr_down
+        #    action: stop
+          - event: drop_target_bank_bank_upr_up
+            action: reset
+
+  tmr_complete_drop_bank_upr_2:
+        start_value: 0  
+        end_value: 2
+        direction: up
+        tick_interval: 1s
+        start_running: no
+        control_events:
+          - event: logicblock_drop_bank_upr_count_complete
+            action: start
+          - event: timer_tmr_complete_drop_bank_upr_2_complete
+            action: reset  
+
+  
+        
+            
+counters:
+  drop_bank_upr_count:
+    count_events: drop_target_bank_bank_upr_down #{value==3}
+    events_when_hit: drop_bank_upr_count_hit
+    starting_count: 0
+    direction: up
+    persist_state: true
+    count_complete_value: 5
+    reset_on_complete: true
+    #enable_events:
+    #  - ball_started
+     # - initialize_dropbank_top
+    #  - timer_timer_down_mb_running_complete
+    #disable_events: timer_timer_down_mb_begin_complete
+    restart_events:
+      - ball_started
+      - initialize_dropbank_top
+      #- logicblock_drop_bank_upr_count_complete
+
+
+              
+
+      
+show_player:
+
+############ lower left drop bank ############       
+  upr_drop_1_hit:
+    color_cycle_show:
+      loops: 3
+      speed: 1
+      priority: 12
+      show_tokens:
+        led: led_upr_gor_drop_ambient
+        color1: blue
+        color2: green
+  upr_drop_2_hit:
+    color_cycle_show:
+      loops: 3
+      speed: 1
+      priority: 13
+      show_tokens:
+        led: led_upr_gor_drop_ambient 
+        color1: blue
+        color2: green
+  upr_drop_3_hit:
+    color_cycle_show:
+      loops: 3
+      speed: 1
+      priority: 14
+      show_tokens:
+        led: led_upr_gor_drop_ambient  
+        color1: blue
+        color2: green
+  upr_bank_hit:
+    color_cycle_speed_up_show:
+      loops: 2
+      speed: 3
+      priority: 15
+      show_tokens:
+        led: led_upr_gor_drop_ambient  
+        color1: blue
+        color2: green
+    color_cycle_speed_up_show_1:
+      loops: 1
+      speed: 4
+      priority: 16
+      show_tokens:
+        led: led_upr_gor_drop_ambient
+        color1: blue
+        color2: red      
+        
+  drop_target_bank_bank_upr_down:
+    color_cycle_speed_up_show:
+      action: stop
+    color_cycle_speed_up_show_1:
+      action: stop
+    color_cycle_show:
+      loops: 10
+      speed: 12
+      priority: 2
+      show_tokens:
+        led: led_upr_gor_drop_ambient  
+        color1: blue
+        color2: green
+    color_cycle_show_1:
+      loops: 10
+      speed: 12
+      priority: 3
+      show_tokens:
+        led: led_upr_gor_drop_ambient 
+        color1: blue
+        color2: red
+        
+  drop_target_bank_bank_upr_up:
+    color_cycle_show:
+      loops: 10
+      speed: 12
+      priority: 4
+      show_tokens:
+        led: led_upr_gor_drop_ambient  
+        color1: blue
+        color2: red
+        
+  #### Lower Left Extra Ball Shot Complete ####
+        
+#  upr_extra_ball_enable:
+#    color_cycle_show:
+#      loops: 4
+#      speed: 6
+#      priority: 5
+#      show_tokens:
+#        led: led_lf_upr_blue_arrow
+#        color1: blue
+#        color2: red
+
+
+
+    
+light_player:
+
+############ lower left drop bank ############    
+    drop_bank_upr_count_hit{count==1}:    
+        led_upr_gor_drop_ambient:
+            color: red
+            fade: 500ms
+        led_snake_5k:
+            color: green
+            fade: 500ms
+        
+    drop_bank_upr_count_hit{count==2}:    
+        led_snake_10k:
+            color: green
+            fade: 500ms
+            
+    drop_bank_upr_count_hit{count==3}:
+        led_snake_20k:
+            color: green
+            fade: 500ms   
+
+    drop_bank_upr_count_hit{count==4}:
+        led_snake_30k:
+            color: green
+            fade: 500ms       
+
+    drop_bank_upr_count_hit{count==5}:
+        led_snake_50k:
+            color: green
+            fade: 500ms                   
+                    
+                 
+    #timer_tmr_complete_drop_bank_upr_2_complete:
+    initialize_dropbank_top:
+        led_upr_gor_drop_ambient:
+            color: off
+            fade: 2500ms
+
+    
+
+  
+variable_player:
+
+############ upper drop bank ############
+
+  s_upr_drop_target_1_active:
+    score: 1000 * current_player.pf_multiplier
+    
+  
+  s_upr_drop_target_2_active:
+    score: 1000 * current_player.pf_multiplier
+    
+  
+  s_upr_drop_target_3_active:
+    score: 1000 * current_player.pf_multiplier
+    
+  mode_dropbank_top_started:
+    snake_multiplier:
+      int: 1
+      action: set
+    
+  drop_bank_upr_count_hit{count==1}:
+    snake_multiplier:
+      int: 5
+      action: set
+  drop_bank_upr_count_hit{count==2}:
+    snake_multiplier:
+      int: 10
+      action: set
+  drop_bank_upr_count_hit{count==3}:
+    snake_multiplier:
+      int: 20
+      action: set
+  drop_bank_upr_count_hit{count==4}:
+    snake_multiplier:
+      int: 30
+      action: set
+  drop_bank_upr_count_hit{count==5}:
+    snake_multiplier:
+      int: 50
+      action: set
+    
+  #############  dropbank_top mode sounds - START ###############
+  
+  
+  ### - SOUNDS IN BASE CONFIG
+  
+
+    
+
+  

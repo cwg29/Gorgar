@@ -1,0 +1,160 @@
+#config_version=6
+##! mode: pit
+
+#GORGAR
+
+### I. PIT
+# ???Making 1-2-3-4 lites PIT for 50,000 & lites next STAR.
+# ???When both STARS are lit, lites arrows alternativly for SPECIAL. 
+# ???Making "D" and "E" spots 1-2-3-4 
+# What enables snake animation and YOU GOT ME?
+
+mode:
+  start_events: start_mode_pit
+  stop_events: stop_mode_pit
+  priority: 800
+  
+event_player:
+  mode_pit_started: initialize_pit
+  pit_target_count_hit{count==1}: pit_shot_hit_once
+  timer_tmr_pit_hold_show_complete: pit_hold_done
+  logic_block_gorgar_attack_0_done: pit_shot_attack_gorgar_0
+  logic_block_gorgar_attack_1_done: pit_shot_attack_gorgar_1
+  
+timers:
+
+  tmr_pit_hold_show:
+        start_value: 0  
+        end_value: 6
+        direction: up
+        tick_interval: 1s
+        start_running: no
+        control_events:
+          - event: pit_target_shots_hit
+            action: start
+          - event: timer_tmr_pit_hold_show_complete
+            action: reset  
+
+
+counters:
+  pit_target_shot_count:
+    count_events: pit_target_shot_hit
+    events_when_hit: pit_target_count_hit
+    starting_count: 0
+    direction: up
+    count_complete_value: 2
+    persist_state: false
+    reset_on_complete: false
+    events_when_complete: pit_target_shot_hit_twice
+    restart_events:
+      - ball_started
+      - initialize_pit
+      
+    
+shot_groups:
+  pit_target_shots:
+    shots: pit_target_shot
+    restart_events: initialize_pit
+    enable_events: initialize_pit
+    reset_events:
+      pit_target_shots_on_complete: 6s
+    
+    
+shots:
+  pit_target_shot:
+    switch: s_pit_target
+    #enable_events: mode_ball_starting_show_ended
+    #disable_events: start_ball_starting_show
+    profile: flash_3
+    
+    
+shot_profiles:
+  flash_3:
+    states:
+      - name: unlit
+        show: "off"
+      - name: lit
+        show: "flash"
+        
+sequences:
+
+  logic_block_gorgar_attack_0:
+    events:
+      - pit_target_shot_hit
+      
+    events_when_complete: logic_block_gorgar_attack_0_done
+    reset_on_complete: true
+    disable_on_complete: false
+    disable_events: pit_attack_gorgar_1
+    persist_state: false
+
+  logic_block_gorgar_attack_1:
+    events:
+      - pit_attack_gorgar_1
+      - pit_target_shot_hit
+      
+    events_when_complete: logic_block_gorgar_attack_1_done
+    reset_on_complete: true
+    disable_on_complete: false
+    persist_state: false
+    
+
+        
+show_player:
+
+  pit_target_shot_hit:
+    color_pit_cycle_show:
+      loops: -1
+      speed: 10
+      priority: 12
+      show_tokens:
+        led: led_pit
+        color1: red
+        color2: off
+        
+  pit_target_shot_hit_twice:
+    color_pit_cycle_show:
+      loops: -1
+      speed: 10
+      priority: 12
+      show_tokens:
+        led: led_pit
+        color1: white
+        color2: off
+        
+  pit_hold_done:
+    color_pit_cycle_show:
+      action: stop
+      
+  pit_attack_gorgar_1:
+    color_pit_snake_cycle_show:
+      loops: -1
+      speed: 22
+      priority: 13
+      #show_tokens:
+      #  led: led_pit
+      #  color1: green
+      #  color2: off
+      
+  pit_shot_attack_gorgar_1:
+    color_pit_snake_cycle_show:
+      action: stop
+    color_pit_cycle_show:
+      loops: -1
+      speed: 10
+      priority: 12
+      show_tokens:
+        led: led_snake, led_pit
+        color1: green
+        color2: off
+      
+variable_player:
+  
+  pit_shot_attack_gorgar_1:
+    score: 50000 * current_player.pf_multiplier  
+
+        
+
+        
+
+        

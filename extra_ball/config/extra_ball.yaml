@@ -1,0 +1,434 @@
+#config_version=6
+##! mode: extra_ball
+# in modes/extra_ball
+
+mode:
+  start_events: start_mode_extra_ball #, ball_starting
+  stop_events: mode_attract_starting #, game_ending #stop_mode_extra_ball, , #extra_ball_off_complete stop_mode_extra_ball
+  #stop_on_ball_end: false
+  #restart_on_next_ball: true
+  priority: 450
+  
+event_player:
+  mode_extra_ball_started: initialize_extra_ball
+  extra_ball_lane_done{count==2}: eb_lvl_1_complete
+  extra_ball_lane_done{count==3}: eb_lvl_2_complete
+  extra_ball_lane_done{count==4}: eb_lvl_3_complete
+  extra_ball_lane_done{count==5}: eb_awarded_complete
+  extra_ball_on_complete: extra_ball_shot_achieved
+  
+  
+shot_groups:
+  extra_ball:
+    shots: extra_ball_1
+    reset_events:
+      extra_ball_on_complete: 4s
+      
+counters:
+  extra_ball_complete_count:
+    count_events: logic_block_eb_done 
+    events_when_hit: extra_ball_lane_done
+    starting_count: 1
+    direction: up
+    persist_state: true
+    
+timers:  #extra_ball_extra_ball_eb_awarded
+  timer_down_eb:
+        start_value: 8
+        end_value: 0
+        direction: down
+        tick_interval: 1s
+        start_running: no
+        control_events:
+            - event: extra_ball_extra_ball_eb_awarded
+              action: start
+            - event: timer_timer_down_eb_complete
+              action: reset
+  timer_down_eb_video:
+        start_value: 13
+        end_value: 0
+        direction: down
+        tick_interval: 1s
+        start_running: no
+        control_events:
+            - event: extra_ball_extra_ball_eb_awarded
+              action: start
+            - event: timer_timer_down_eb_video_complete
+              action: reset
+  timer_down_eb_start_video:
+        start_value: 2
+        end_value: 0
+        direction: down
+        tick_interval: 1s
+        start_running: no
+        control_events:
+            - event: ball_started{is_extra_ball == True}
+              action: start
+            - event: timer_timer_down_eb_start_video_complete
+              action: reset
+  timer_down_eb_start_video_done:
+        start_value: 8
+        end_value: 0
+        direction: down
+        tick_interval: 1s
+        start_running: no
+        control_events:
+            - event: ball_started{is_extra_ball == True}
+              action: start
+            - event: timer_timer_down_eb_start_video_done_complete
+              action: reset
+  timer_down_eb_shot_video:
+        start_value: 4
+        end_value: 0
+        direction: down
+        tick_interval: 1s
+        start_running: no
+        control_events:
+            - event: slide_extra_ball_hit_1_active
+              action: start
+            - event: timer_timer_down_eb_shot_video_complete
+              action: reset
+  timer_down_eb_shot_video2:
+        start_value: 6
+        end_value: 0
+        direction: down
+        tick_interval: 1s
+        start_running: no
+        control_events:
+            - event: slide_extra_ball_hit_2_active
+              action: start
+            - event: timer_timer_down_eb_shot_video2_complete
+              action: reset
+  timer_down_eb_shot_video3:
+        start_value: 6
+        end_value: 0
+        direction: down
+        tick_interval: 1s
+        start_running: no
+        control_events:
+            - event: slide_extra_ball_hit_3_active
+              action: start
+            - event: timer_timer_down_eb_shot_video3_complete
+              action: reset
+  timer_down_eb_shot_video4:
+        start_value: 6
+        end_value: 0
+        direction: down
+        tick_interval: 1s
+        start_running: no
+        control_events:
+            - event: slide_extra_ball_hit_4_active
+              action: start
+            - event: timer_timer_down_eb_shot_video4_complete
+              action: reset
+  timer_down_eb_shot_video5:
+        start_value: 6
+        end_value: 0
+        direction: down
+        tick_interval: 1s
+        start_running: no
+        control_events:
+            - event: slide_extra_ball_hit_5_active
+              action: start
+            - event: timer_timer_down_eb_shot_video5_complete
+              action: reset
+              
+accruals:
+  logic_block_eb_start:
+    events:
+      - gor_bank_achieved
+      - gar_bank_achieved
+      
+    events_when_complete: logic_block_eb_done
+    reset_on_complete: true
+    disable_on_complete: false
+    persist_state: false
+    
+sequences:
+    
+  logic_block_eb_award:
+    events:
+      - eb_lvl_3_complete
+      - extra_ball_1_hit
+      
+    events_when_complete: logic_block_eb_award_done
+    reset_on_complete: true
+    disable_on_complete: false
+    persist_state: false
+    
+shots:
+  extra_ball_1:
+    switch: s_left_saucer
+    profile: extra_ball_profile
+      
+shot_profiles:
+  extra_ball_profile:
+    states:
+      - name: off
+        show: off
+      - name: on
+        show: on
+         
+show_player:
+  extra_ball_lane_done{count==2}:
+    extra_ball_light_show:
+      loops: 6
+      speed: 5
+      show_tokens:
+        lights: extra_ball_lane
+  extra_ball_lane_done{count==3}:
+    extra_ball_light_show:
+      loops: 6
+      speed: 5
+      show_tokens:
+        lights: extra_ball_lane
+  extra_ball_lane_done{count==4}:
+    extra_ball_light_show:
+      loops: 6
+      speed: 5
+      show_tokens:
+        lights: extra_ball_lane
+  logic_block_eb_award_done:
+    extra_ball_light_show_2:
+      loops: 6
+      speed: 6
+      show_tokens:
+        lights: extra_ball_lane
+    #extra_ball_bell_show:
+      #loops: 2
+      #speed: 6
+      
+  eb_lvl_3_complete:
+    color_cycle_eb_show:
+      loops: -1
+      speed: 4
+      priority: 10
+      show_tokens:
+        led1: led_kicker_1_10K
+        led2: led_kicker_2_15K
+        led3: led_kicker_3_extra_ball
+        led4: led_kicker
+        color1: red
+        color2: off
+        color3: off
+        color4: off
+  timer_timer_down_eb_complete:
+    color_cycle_eb_show:
+      action: stop
+    
+        
+light_player:
+  extra_ball_lane_done{count==2}:
+        l_led13:  #led_kicker_1_10K
+            color: blue
+            fade: 500ms
+  extra_ball_lane_done{count==3}:
+        l_led14:  #led_kicker_2_15K
+            color: lime
+            fade: 500ms
+  extra_ball_lane_done{count==4}:
+        l_led15:  #led_kicker_3_extra_ball
+            color: orange
+            fade: 500ms
+  extra_ball_lane_done{count==5}:
+        l_led13:  #led_kicker_1_10K
+            color: off
+            fade: 500ms
+        l_led14:  #led_kicker_2_15K
+            color: off
+            fade: 500ms
+        l_led15:  #led_kicker_3_extra_ball
+            color: off
+            fade: 500ms
+        bb_shoot_again:
+            color: yellow
+            fade: 500ms
+  extra_ball_extra_ball_eb_awarded:
+        bb_shoot_again:
+            color: yellow
+            fade: 500ms
+        l_led13:  #led_kicker_1_10K
+            color: yellow
+            fade: 500ms
+        l_led14:  #led_kicker_2_15K
+            color: lime
+            fade: 500ms
+        l_led15:  #led_kicker_3_extra_ball
+            color: orange
+            fade: 500ms
+
+            
+variable_player:
+  extra_ball_lane_done{count==2}:
+    score: 10000
+  extra_ball_lane_done{count==3}:
+    score: 15000
+  extra_ball_lane_done{count==4}:
+    score: 50000
+  extra_ball_lane_done{count==5}:
+    score: 100000
+    
+  extra_ball_extra_ball_eb_awarded:
+    bonus_extra_ball: 1
+  extra_ball_extra_ball_eb_awarded.1:
+    bonus_extra_ball_multiplier:
+      int: 1
+      action: set 
+ 
+  #timer_timer_down_eb_start_video_done_complete:
+    #bonus_extra_ball_multiplier:
+      #int: 0
+      #action: set
+    
+#slide_player:
+#  extra_ball_lane_done{count==2}:
+#    extra_ball_hit_1:
+#      expire: 5s
+#  extra_ball_lane_done{count==3}:
+#    extra_ball_hit_2:
+#      expire: 7s
+#  extra_ball_lane_done{count==4}:
+#    extra_ball_hit_3:
+#      expire: 7s
+#  extra_ball_lane_done{count==5}:
+#    extra_ball_hit_4:
+#      expire: 7s
+#  timer_timer_down_eb_complete:
+#    extra_ball_awarded:
+#      expire: 14s
+#  timer_timer_down_eb_start_video_complete: shoot_again_eb
+#      #expire: 30s
+#  timer_timer_down_eb_shot_video_complete:
+#    extra_ball_hit_1:
+#      action: remove
+#      transition:
+#        type: fade
+#        duration: 1s
+#  timer_timer_down_eb_shot_video2_complete:
+#    extra_ball_hit_2:
+#      action: remove
+#      transition:
+#        type: fade
+#        duration: 1s
+#  timer_timer_down_eb_shot_video3_complete:
+#    extra_ball_hit_3:
+#      action: remove
+#      transition:
+#        type: fade
+#        duration: 1s
+#  timer_timer_down_eb_shot_video4_complete:
+#    extra_ball_hit_4:
+#      action: remove
+#      transition:
+#        type: fade
+#        duration: 1s
+#  timer_timer_down_eb_video_complete:
+#    extra_ball_awarded:
+#      action: remove
+#      transition:
+#        type: fade
+#        duration: 1s
+#  timer_timer_down_eb_start_video_done_complete:
+#    shoot_again_eb:
+#      action: remove
+#      transition:
+#        type: fade
+#        duration: 1s
+
+#slides:
+#  extra_ball_hit_1:
+#    - type: text
+#      font_name: ancienttext
+#      color: white
+#      text: Energy Level!
+#      font_size: 100
+#      expire: 5s
+#      y: 40
+#      anchor_y: bottom
+#      z: 5
+#    - type: video
+#      video: energy_level_1_video
+#      height: 768
+#      width: 1366
+#      z: 5
+#      expire: 5s
+#  extra_ball_hit_2:
+#    - type: text
+#      font_name: ancienttext
+#      color: white
+#      text: 2X Energy Level!
+#      font_size: 100
+#      expire: 7s
+#      y: 40
+#      anchor_y: bottom
+#      z: 5
+#    - type: video
+#      video: energy_level_2_video
+#      height: 768
+#      width: 1366
+#      z: 5
+#      expire: 7s
+#  extra_ball_hit_3:
+#    - type: text
+#      font_name: ancienttext
+#      color: white
+#      text: 3X Energy Level!
+#      font_size: 100
+#      expire: 7s
+#      y: 40
+#      anchor_y: bottom
+#      z: 5
+#    - type: video
+#      video: energy_level_3_video
+#      height: 768
+#      width: 1366
+#      z: 5
+#      expire: 7s
+#  extra_ball_hit_4:
+#    - type: text
+#      font_name: ancienttext
+#      color: white
+#      text: Pure Energy!
+#      font_size: 100
+#      expire: 7s
+#      y: 40
+#      anchor_y: bottom
+#      z: 5
+#    - type: video
+#      video: energy_level_4_video
+#      height: 768
+#      width: 1366
+#      z: 5
+#      expire: 7s
+#  extra_ball_awarded:
+#    - type: text
+#      font_name: ancienttext
+#      color: white
+#      text: Extra Ball!
+#      font_size: 100
+#      expire: 6s
+#      y: 40
+#      anchor_y: bottom
+#      z: 5
+#    - type: video
+#      video: energy_level_5_video  #change video name to level 5
+#      height: 768
+#      width: 1366
+#      z: 5
+#      expire: 6s
+#  shoot_again_eb:
+#    - type: text
+#      font_name: ancienttext
+#      color: white
+#      text: Extra Ball - Shoot Again!
+#      font_size: 80
+#      expire: 8s
+#      y: 40
+#      anchor_y: bottom
+#      z: 5
+#    - type: video
+#      video: energy_level_6_video
+#     height: 768
+#      width: 1366
+#      z: 5
+#      expire: 8s

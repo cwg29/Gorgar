@@ -1,0 +1,130 @@
+#config_version=6
+##! mode: kickback
+
+#GORGAR
+
+### I. KICKBACK
+# Left outer lane kickback based on ball save enable events (look in base mode)
+
+
+mode:
+  start_events: start_mode_kickback
+  stop_events: stop_mode_kickback
+  priority: 850
+  
+event_player:
+  mode_kickback_started: initialize_kickback
+  timer_tmr_kickback_coil_fire_complete: kicking_back
+  logic_block_kickback_done: start_kickback_coil_timer
+  
+  
+timers:
+
+  tmr_kickback_coil_fire:
+        start_value: 0  
+        end_value: 1
+        direction: up
+        tick_interval: 400ms
+        start_running: no
+        control_events:
+          - event: start_kickback_coil_timer
+            action: start
+          - event: timer_tmr_kickback_coil_fire_complete
+            action: reset  
+
+
+counters:
+  kickback_target_shot_count:
+    count_events: kickback_target_shot_hit
+    events_when_hit: kickback_target_count_hit
+    starting_count: 0
+    direction: up
+    count_complete_value: 2
+    persist_state: false
+    reset_on_complete: false
+    events_when_complete: kickback_target_shot_hit_twice
+    restart_events:
+      - ball_started
+      - initialize_kickback
+      
+    
+#shot_groups:
+#  pit_target_shots:
+#    shots: pit_target_shot
+#    restart_events: initialize_pit
+#    enable_events: initialize_pit
+#    reset_events:
+#      pit_target_shots_on_complete: 6s
+    
+    
+shots:
+  kickback_target_shot:
+    switch: s_ro_left_lwr_out
+    #enable_events: mode_ball_starting_show_ended
+    #disable_events: start_ball_starting_show
+    profile: flash_4
+
+sequences:    
+  logic_block_kickback:
+    events:
+      - ball_save_shoot_again_enabled
+      - kickback_target_shot_hit
+      
+    events_when_complete: logic_block_kickback_done
+    reset_on_complete: true
+    disable_on_complete: false
+    persist_state: false
+    
+    
+shot_profiles:
+  flash_4:
+    states:
+      - name: unlit
+        show: "off"
+      - name: lit
+        show: "flash"
+        
+        
+show_player:
+
+  kickback_target_shot_hit:
+    color_kickback_cycle_show:
+      loops: -1
+      speed: 10
+      priority: 12
+      show_tokens:
+        led: led_lwr_lf_spec_wl
+        color1: red
+        color2: off
+        
+  kickback_target_shot_hit_twice:
+    color_kickback_cycle_show:
+      loops: -1
+      speed: 10
+      priority: 13
+      show_tokens:
+        led: led_lwr_lf_spec_wl
+        color1: white
+        color2: off
+        
+  kickback_done:
+    color_kickback_cycle_show:
+      action: stop
+      
+  timer_tmr_kickback_coil_fire_complete:    
+    color_kickback_cycle_show:
+      loops: 3
+      speed: 10
+      priority: 14
+      show_tokens:
+        led: led_blade_left, led_blade_right  
+        color1: blue
+        color2: green
+      
+coil_player:
+  timer_tmr_kickback_coil_fire_complete: c_kickback
+        
+
+        
+
+        
