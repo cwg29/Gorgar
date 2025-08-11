@@ -1,0 +1,48 @@
+mpf service
+
+light_color l_led1
+
+light_color l_led5 red
+
+light_color l_bb_gi_1
+
+
+coil_pulse
+coil_pulse
+coil_pulse
+coil_pulse
+
+coil_pulse c_flipper_left_main
+coil_pulse c_flipper_left_hold
+coil_pulse c_flipper_right_main
+coil_pulse c_flipper_right_hold
+coil_pulse c_flipper_upper_left_main
+coil_pulse c_flipper_upper_left_hold
+coil_pulse c_flipper_upper_right_main
+coil_pulse c_flipper_upper_right_hold
+
+
+
+coil_pulse c_drop_target_blue_upr_right
+coil_pulse c_drop_target_red_upr_left
+coil_pulse c_pop_bmp
+coil_pulse c_kickout_top
+
+coil_pulse c_shooter_launch
+coil_pulse c_trough_eject
+coil_pulse c_slingshot_right
+coil_pulse c_slingshot_left
+coil_pulse c_kickout_lower
+coil_pulse c_drop_target_lwr
+coil_pulse c_drop_target_upr
+coil_pulse c_bell
+
+c_saucer_top
+coil_pulse c_trough_eject
+coil_pulse c_magna_left
+
+coil_pulse c_pop_bmp_1
+coil_pulse c_pop_bmp_2
+coil_pulse c_pop_bmp_3
+
+exit
