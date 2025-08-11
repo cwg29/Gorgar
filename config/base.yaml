@@ -1,0 +1,938 @@
+#config_version=6
+##! mode: base
+
+#GORGAR
+
+
+mode:
+    start_events: ball_will_start #{ball>1}
+    stop_events: ball_will_stop
+    priority: 100
+    #start_events: start_base #, ball_starting{ball>1}  #ball_will_start     # in normal mode use ball_started instead
+
+      
+
+
+event_player:
+  mode_base_started:
+    
+    - start_mode_awards #priority 175
+    - start_mode_bonus_collect  #priority 250
+    - start_mode_lane_change #priority 300
+    - start_mode_popbmpr #priority 350
+    - start_mode_extra_ball #priority 450
+    - start_mode_magna_save #priority 300
+    - start_mode_dropbank_bottom  #priority 550
+    - start_mode_dropbank_top  #priority 600
+    - start_mode_spinner  #priority 700
+    - start_mode_fire_targets #priority 750
+    - start_mode_pit #priority 800
+    - start_mode_kickback #priority 850
+    - start_mode_warriors #priority 900
+    - start_mode_skillshot #priority 1150
+    #- start_mode_high_score
+    - initialize_base
+
+    
+    
+light_player:
+
+    mode_base_started:
+        led_gi:
+            color: white
+            fade: 500ms
+        bb_gi:
+            color: white
+            fade: 500ms
+        bb_gi_blue:
+            color: blue
+            fade: 500ms
+        bb_gi_green:
+            color: green
+            fade: 500ms
+        bb_gi_red:
+            color: red
+            fade: 500ms
+        bb_gorgar:
+            color: red
+            fade: 500ms 
+        bb_title:
+            color: green
+            fade: 500ms     
+
+    ball_starting:
+        bb_ball_in_play:
+            color: yellow
+            fade: 500ms
+
+ ###shoot again
+    ball_save_shoot_again_enabled:
+        led_shoot_again:
+            color: yellow
+            fade: 1000ms
+        led_lwr_lf_spec_wl:
+            color: red
+            fade: 1000ms
+ #   ball_save_shoot_again_hurry_up:
+ #       l_led1:
+ #           color: red
+  #          fade: 500ms
+    ball_save_shoot_again_disabled:
+        led_shoot_again:
+            color: off
+            fade: 500ms
+        led_lwr_lf_spec_wl:
+            color: off
+            fade: 500ms            
+         
+            
+queue_relay_player:
+
+    ball_starting{current_player.ball==1}:
+        post: start_ball_1_starting_voice_show
+        wait_for: mode_ball_1_starting_voice_show_ended
+    ball_ending:
+        post: start_ball_ending_show
+        wait_for: timer_bonus_collect_timer2_complete  #mode_bonus_collect_show_ended
+    ball_ended{current_player.ball==3 and not is_extra_ball}:
+        post: start_ball_ending_voice_show
+        wait_for: mode_ball_ending_voice_show_ended
+        
+show_player:
+
+    start_ball_1_starting_voice_show:
+        ball_1_starting_voice_show:
+            loops: 0
+            events_when_stopped: mode_ball_1_starting_voice_show_ended
+            
+    start_ball_ending_show:
+        ball_ending_show:
+            loops: 0
+            speed: 5
+            events_when_stopped: mode_ball_ending_show_ended
+            
+    start_ball_ending_voice_show:
+        ball_ending_voice_show:
+            loops: 0
+            speed: 5
+            events_when_stopped: mode_ball_ending_voice_show_ended
+
+
+
+ ### Show Player - Run the segment displays with player score values  ###
+ ########################################################################
+
+    ball_started{player==1 and (ball>1 or is_extra_ball==True)}:
+        P1_scoreFlash:
+            show_tokens:
+                txt: "{(players[0].score):>8,d}"
+            key: scoreFlash
+            priority: 2
+            speed: 3
+    ball_started{player==2 and (ball>1 or is_extra_ball==True)}:
+        P2_scoreFlash:
+            show_tokens:
+                txt: "{(players[1].score):>8,d}"
+            key: scoreFlash
+            priority: 2
+            speed: 3
+    ball_started{player==3 and (ball>1 or is_extra_ball==True)}:
+        P3_scoreFlash:
+            show_tokens:
+                txt: "{(players[2].score):>8,d}"
+            key: scoreFlash
+            priority: 2
+            speed: 3
+    ball_started{player==4 and (ball>1 or is_extra_ball==True)}:
+        P4_scoreFlash:
+            show_tokens:
+                txt: "{(players[3].score):>8,d}"
+            key: scoreFlash
+            priority: 2
+            speed: 3
+
+    ball_started{player!=1}:
+        P1_score:
+            show_tokens:
+                txt: "{(players[0].score):>8,d}"
+            key: p1score
+    ball_started{player!=2 and game.num_players > 1}:
+        P2_score:
+            show_tokens:
+                txt: "{(players[1].score):>8,d}"
+            key: p2score
+    ball_started{player!=3 and game.num_players > 2}:
+        P3_score:
+            show_tokens:
+                txt: "{(players[2].score):>8,d}"
+            key: p3score
+    ball_started{player!=4 and game.num_players > 3}:
+        P4_score:
+            show_tokens:
+                txt: "{(players[3].score):>8,d}"
+            key: p4score
+    ball_started{player!=2 and game.num_players > 1 and players[1].score == 0}:
+        P2_score:
+            show_tokens:
+                txt: "      00"
+            key: p2score0
+            priority: 3
+    ball_started{player!=3 and game.num_players > 2 and players[2].score == 0}:
+        P3_score:
+            show_tokens:
+                txt: "      00"
+            key: p3score0
+            priority: 3
+    ball_started{player!=4 and game.num_players > 3 and players[3].score == 0}:
+        P4_score:
+            show_tokens:
+                txt: "      00"
+            key: p4score0
+            priority: 3
+
+    player_score{player_num==1 and value>0}:
+        scoreFlash: stop
+        P1_score:
+            show_tokens:
+                txt: "{(players[0].score):>8,d}"
+            key: p1score
+    player_score{player_num==2 and value>0}:
+        scoreFlash: stop
+        P2_score:
+            show_tokens:
+                txt: "{(players[1].score):>8,d}"
+            key: p2score
+    player_score{player_num==3 and value>0}:
+        scoreFlash: stop
+        P3_score:
+            show_tokens:
+                txt: "{(players[2].score):>8,d}"
+            key: p3score
+    player_score{player_num==4 and value>0}:
+        scoreFlash: stop
+        P4_score:
+            show_tokens:
+                txt: "{(players[3].score):>8,d}"
+            key: p4score
+
+    ball_started{player==1 and ball==1 and is_extra_ball==False}:
+        P1_scoreFlash:
+            show_tokens:
+                txt: "      00"
+            key: scoreFlash
+            priority: 3
+            speed: 3
+    ball_started{player==2 and ball==1 and is_extra_ball==False}:
+        P2_scoreFlash:
+            show_tokens:
+                txt: "      00"
+            key: scoreFlash
+            priority: 3
+            speed: 3
+    ball_started{player==3 and ball==1 and is_extra_ball==False}:
+        P3_scoreFlash:
+            show_tokens:
+                txt: "      00"
+            key: scoreFlash
+            priority: 3
+            speed: 3
+    ball_started{player==4 and ball==1 and is_extra_ball==False}:
+        P4_scoreFlash:
+            show_tokens:
+                txt: "      00"
+            key: scoreFlash
+            priority: 3
+            speed: 3
+            
+    player_added{num==2}:
+        P2_score:
+            show_tokens:
+                txt: "      00"
+            key: p2scoreadd
+            priority: 3
+    player_added{num==3}:
+        P3_score:
+            show_tokens:
+                txt: "      00"
+            key: p3scoreadd
+            priority: 3
+    player_added{num==4}:
+        P4_score:
+            show_tokens:
+                txt: "      00"
+            key: p4scoreadd
+            priority: 3
+            
+    #single_player_ball_started:
+    ball_started:
+        credit_display:
+            show_tokens:
+                txt: "{(machine.credit_units):>2,d}"
+        ball_display:
+            show_tokens:
+                txt: "{(players[0].ball):>2,d}"
+
+            
+            
+
+
+
+
+shows:
+
+    ball_1_starting_voice_show:
+        - duration: 3s
+    ball_ending_show:
+        - duration: 10s
+    ball_ending_voice_show:
+        - duration: 5s
+        
+#####################################################        
+###  Shows - Segment display show score values   ####
+#####################################################
+    
+    P1_score:
+        - duration: -1
+          segment_displays:
+            neoSegP1:
+                text: (txt)
+    P2_score:
+        - duration: -1
+          segment_displays:
+            neoSegP2:
+                text: (txt)
+    P3_score:
+        - duration: -1
+          segment_displays:
+            neoSegP3:
+                text: (txt)
+    P4_score:
+        - duration: -1
+          segment_displays:
+            neoSegP4:
+                text: (txt)
+    P1_scoreFlash:
+        - duration: 0.75
+          segment_displays:
+            neoSegP1:
+                text: (txt)
+        - duration: 0.25
+          segment_displays:
+            neoSegP1:
+                text: "        "
+    P2_scoreFlash:
+        - duration: 0.75
+          segment_displays:
+            neoSegP2:
+                text: (txt)
+        - duration: 0.25
+          segment_displays:
+            neoSegP2:
+                text: "        "
+    P3_scoreFlash:
+        - duration: 0.75
+          segment_displays:
+            neoSegP3:
+                text: (txt)
+        - duration: 0.25
+          segment_displays:
+            neoSegP3:
+                text: "        "
+    P4_scoreFlash:
+        - duration: 0.75
+          segment_displays:
+            neoSegP4:
+                text: (txt)
+        - duration: 0.25
+          segment_displays:
+            neoSegP4:
+                text: "        "
+                
+    ball_display:
+        - duration: -1
+          segment_displays:
+            neoSegball:
+                text: (txt)
+
+    credit_display:
+        - duration: -1
+          segment_displays:
+            neoSegcredit:
+                text: (txt)
+        
+        
+
+
+   
+        
+sounds:
+  add_coin_sound:
+    file: add_coin_sound.wav
+    track: sfx
+    volume: 0.8
+    simultaneous_limit: 1
+    max_que_time: 0s
+    priority: 2
+    ducking:
+              target: music
+              delay: 0
+              attack: 0.01 sec
+              attenuation: 0.1
+              release_point: 0.9 sec
+              release: 0.5 sec
+              
+  slingshot_sound:
+    file: slingshot_sound.wav
+    track: sfx
+    volume: 1.0
+    simultaneous_limit: 2
+    max_que_time: 0s
+    priority: 2
+    ducking:
+              target: music
+              delay: 0
+              attack: 0.001 sec
+              attenuation: 0.05
+              release_point: 0.95 sec
+              release: 0.5 sec
+              
+  drop_target_sound:
+    file: rollover_2.wav
+    track: sfx
+    volume: 0.8
+    simultaneous_limit: 1
+    max_que_time: 0s
+    priority: 2
+    ducking:
+              target: music
+              delay: 0
+              attack: 0.01 sec
+              attenuation: 0.1
+              release_point: 0.9 sec
+              release: 0.5 sec
+  pop_sound:
+    file: pop_bumper.wav
+    track: sfx
+    volume: 0.8
+    simultaneous_limit: 1
+    max_que_time: 0s
+    priority: 2
+    ducking:
+              target: music
+              delay: 0
+              attack: 0.01 sec
+              attenuation: 0.1
+              release_point: 0.9 sec
+              release: 0.5 sec
+              
+  rollover_sound:
+    file: rollover.wav
+    track: sfx
+    volume: 0.8
+    simultaneous_limit: 1
+    max_que_time: 0s
+    priority: 2
+    ducking:
+              target: music
+              delay: 0
+              attack: 0.01 sec
+              attenuation: 0.1
+              release_point: 0.9 sec
+              release: 0.5 sec
+              
+  bounce_sound:
+    file: short_wiggle.wav
+    track: sfx
+    volume: 0.5
+    simultaneous_limit: 1
+    max_que_time: 0s
+    priority: 2
+    ducking:
+              target: music
+              delay: 0
+              attack: 0.01 sec
+              attenuation: 0.1
+              release_point: 0.9 sec
+              release: 0.5 sec
+              
+  fire_target_sound:
+    file: birdie_slow.wav
+    track: sfx
+    volume: 0.8
+    simultaneous_limit: 1
+    max_que_time: 0s
+    priority: 2
+    ducking:
+              target: music
+              delay: 0
+              attack: 0.01 sec
+              attenuation: 0.1
+              release_point: 0.9 sec
+              release: 0.5 sec
+              
+  abc_done_sound:
+    file: ricochet.wav
+    track: sfx
+    volume: 0.8
+    simultaneous_limit: 1
+    max_que_time: 0s
+    priority: 2
+    ducking:
+              target: music
+              delay: 0
+              attack: 0.01 sec
+              attenuation: 0.1
+              release_point: 0.9 sec
+              release: 0.5 sec
+              
+  drop_target_timer_sound:
+    file: harp_bell_1.wav
+    track: sfx
+    volume: 0.8
+    simultaneous_limit: 1
+    max_que_time: 0s
+    priority: 2
+    ducking:
+              target: music
+              delay: 0
+              attack: 0.01 sec
+              attenuation: 0.5
+              release_point: 0.9 sec
+              release: 0.5 sec
+              
+  drop_target_complete_3_sound:
+    file: harp_2.wav
+    track: sfx
+    volume: 0.8
+    simultaneous_limit: 1
+    max_que_time: 0s
+    priority: 2
+    ducking:
+              target: music
+              delay: 0
+              attack: 0.01 sec
+              attenuation: 0.5
+              release_point: 0.9 sec
+              release: 0.5 sec
+              
+  spinner_sound:
+    file: phaser_down.wav
+    track: sfx
+    volume: 0.8
+    simultaneous_limit: 1
+    max_que_time: 0s
+    priority: 2
+    ducking:
+              target: music
+              delay: 0
+              attack: 0.01 sec
+              attenuation: 0.1
+              release_point: 0.9 sec
+              release: 0.5 sec
+              
+  bonus_collect_sound:
+    file: phaser_down_short.wav
+    track: sfx
+    volume: 0.8
+    simultaneous_limit: 1
+    max_que_time: 0s
+    priority: 2
+    ducking:
+              target: music
+              delay: 0
+              attack: 0.01 sec
+              attenuation: 0.1
+              release_point: 0.9 sec
+              release: 0.5 sec
+              
+  ball_trap_sound:
+    file: deep_bounce.wav
+    track: sfx
+    volume: 0.9
+    simultaneous_limit: 1
+    max_que_time: 0s
+    priority: 2
+    ducking:
+              target: music
+              delay: 0
+              attack: 0.001 sec
+              attenuation: 0.05
+              release_point: 0.95 sec
+              release: 0.5 sec
+              
+  eb_done_sound:
+    file: ricochet_funky.wav
+    track: sfx
+    volume: 0.8
+    simultaneous_limit: 1
+    max_que_time: 0s
+    priority: 2
+    ducking:
+              target: music
+              delay: 0
+              attack: 0.01 sec
+              attenuation: 0.1
+              release_point: 0.9 sec
+              release: 0.5 sec
+              
+  kickback_sound:
+    file: ball_lock_sound.wav
+    track: sfx
+    volume: 0.8
+    simultaneous_limit: 1
+    max_que_time: 0s
+    priority: 2
+    ducking:
+              target: music
+              delay: 0
+              attack: 0.01 sec
+              attenuation: 0.1
+              release_point: 0.9 sec
+              release: 0.5 sec
+              
+  skillshot_sound:
+    file: mystery_bonus.wav
+    track: sfx
+    volume: 0.8
+    simultaneous_limit: 1
+    max_que_time: 0s
+    priority: 2
+    ducking:
+              target: music
+              delay: 0
+              attack: 0.01 sec
+              attenuation: 0.1
+              release_point: 0.9 sec
+              release: 0.5 sec
+              
+              
+######################## VOICE ############################              
+              
+  game_start_voice_1:
+    file: me_gorgar_beat_me.wav
+    track: sfx
+    Volume: 1.0
+    simultaneous_limit: 1
+    priority: 3
+  game_start_voice_2:
+    file: gorgar.wav
+    track: sfx
+    Volume: 1.0
+    simultaneous_limit: 1
+    priority: 3
+              
+  game_over_voice:
+    file: gorgar_speaks.wav
+    track: sfx
+    Volume: 1.0
+    simultaneous_limit: 1
+    priority: 3
+    ducking:
+              target: music
+              delay: 0
+              attack: 0.01 sec
+              attenuation: 0.1
+              release_point: 0.9 sec
+              release: 0.5 secs    
+
+  attract_voice:
+    file: gorgar_speaks.wav
+    track: sfx
+    Volume: 1.0
+    simultaneous_limit: 1
+    priority: 3
+    ducking:
+              target: music
+              delay: 0
+              attack: 0.01 sec
+              attenuation: 0.1
+              release_point: 0.9 sec
+              release: 0.5 sec 
+
+  me_got_you_voice:
+    file: me_got_you.wav
+    track: sfx
+    Volume: 1.0
+    simultaneous_limit: 1
+    priority: 3
+    ducking:
+              target: music
+              delay: 0
+              attack: 0.01 sec
+              attenuation: 0.1
+              release_point: 0.9 sec
+              release: 0.5 secs   
+
+  me_hurt_voice:
+    file: me_hurt.wav
+    track: sfx
+    Volume: 1.0
+    simultaneous_limit: 1
+    priority: 3
+    ducking:
+              target: music
+              delay: 0
+              attack: 0.01 sec
+              attenuation: 0.1
+              release_point: 0.9 sec
+              release: 0.5 secs 
+
+  you_hurt_gorgar_voice:
+    file: you_hurt_gorgar.wav
+    track: sfx
+    Volume: 1.0
+    simultaneous_limit: 1
+    priority: 3
+    ducking:
+              target: music
+              delay: 0
+              attack: 0.01 sec
+              attenuation: 0.1
+              release_point: 0.9 sec
+              release: 0.5 secs                        
+ 
+###############  BACKGROUND LOOP MUSIC #################              
+              
+  play_active_loop_sound_1:
+    file: heartbeat.wav
+    track: music
+    volume: 0.8
+    simultaneous_limit: 1
+    max_que_time: 0s
+    priority: 3
+      
+       
+              
+              
+sound_pools:
+  ball_start_callout:
+    type: random_force_all
+    track: voice
+    sounds:
+      - game_start_voice_1
+      - game_start_voice_2
+  drop_bank_complete:
+    type: random_force_all
+    track: sfx
+    sounds:
+      - drop_target_timer_sound
+      - drop_target_complete_3_sound
+  
+      
+      
+      
+
+      
+sound_player:
+
+  start_ball_1_starting_voice_show: ball_start_callout
+  start_ball_ending_voice_show: game_over_voice
+  
+  s_startbutton_active: add_coin_sound
+  s_lwr_drop_target_1_active: drop_target_sound
+  s_lwr_drop_target_2_active: drop_target_sound
+  s_lwr_drop_target_3_active: drop_target_sound
+  s_upr_drop_target_1_active: drop_target_sound
+  s_upr_drop_target_2_active: drop_target_sound
+  s_upr_drop_target_3_active: drop_target_sound
+  
+  s_left_sling_shot_active: slingshot_sound 
+  s_right_sling_shot_active: slingshot_sound
+  s_ro_left_lwr_out_active: rollover_sound
+  s_ro_right_lwr_out_active: rollover_sound
+  s_ro_right_lwr_in_active: rollover_sound
+  s_ro_left_lwr_in_active: rollover_sound
+  s_ro_a_active: rollover_sound
+  s_ro_b_active: rollover_sound
+  s_ro_c_active: rollover_sound
+  
+  s_n_target_1_active: bounce_sound
+  s_n_target_2_active: bounce_sound
+  s_n_target_3_active: bounce_sound
+  s_n_target_4_active: bounce_sound
+  s_n_target_5_active: bounce_sound
+  
+  
+  #s_target_1_active: rollover_sound
+  #s_target_2_active: rollover_sound
+  #s_target_3_active: rollover_sound
+  #s_target_4_active: rollover_sound
+  
+  s_target_1_active{current_player.sound_fire_shots_enable==0}: rollover_sound 
+    
+  s_target_1_active{current_player.sound_fire_shots_enable==1}: fire_target_sound
+    
+  s_target_2_active{current_player.sound_fire_shots_enable==0}: rollover_sound 
+     
+  s_target_2_active{current_player.sound_fire_shots_enable==1}: fire_target_sound
+   
+  s_target_3_active{current_player.sound_fire_shots_enable==0}: rollover_sound 
+   
+  s_target_3_active{current_player.sound_fire_shots_enable==1}: fire_target_sound
+   
+  s_target_4_active{current_player.sound_fire_shots_enable==0}: rollover_sound 
+  
+  s_target_4_active{current_player.sound_fire_shots_enable==1}: fire_target_sound
+   
+  
+  #fire_target_1_count_hit{count==1}: rollover_sound  #on initial hit
+  #fire_target_2_count_hit{count==1}: rollover_sound  #on initial hit
+  #fire_target_3_count_hit{count==1}: rollover_sound  #on initial hit
+  #fire_target_4_count_hit{count==1}: rollover_sound  #on initial hit
+  #fire_target_1_count_hit{count>=2}: fire_target_sound 
+  #fire_target_2_count_hit{count>=2}: fire_target_sound
+  #fire_target_3_count_hit{count>=2}: fire_target_sound
+  #fire_target_4_count_hit{count>=2}: fire_target_sound  
+  
+  #fire_target_shot_attack_0: rollover_sound
+  #fire_target_shot_attack_1: fire_target_sound
+  
+    
+  s_pop_bumper_1_active: pop_sound
+  s_pop_bumper_2_active: pop_sound
+  s_pop_bumper_3_active: pop_sound
+  
+  lane_change_on_complete: abc_done_sound
+  skillshot_lit_hit: skillshot_sound
+  
+  s_spinner_active{current_player.pf_spinner_multiplier<=1}: pop_sound
+  s_spinner_active{current_player.pf_spinner_multiplier>1}: spinner_sound
+  
+  s_left_saucer_active: ball_trap_sound
+  
+  extra_ball_lane_done{count==5}: eb_done_sound
+  
+  #pit_shot_hit_once: me_got_you_voice
+  
+  kicking_back: kickback_sound
+  
+  pit_attack_gorgar_1:
+    me_hurt_voice:
+      delay: 2s
+  
+  pit_shot_attack_gorgar_0:
+    me_got_you_voice:
+      delay: 1s
+      
+  pit_shot_attack_gorgar_1:
+    you_hurt_gorgar_voice:
+      delay: 2s
+    
+  
+  
+  #playfield_active:
+  #  horse_trot_sound:
+  #    action: stop
+  #   fade_out: 2s
+   #   loops: -1
+     
+  #horse_trot_sound_ended:  
+  #  play_active_loop_sound_1:
+  #    action: play
+  #    fade_in: 2s
+  #    loops: -1
+  
+  ball_starting{ball==1}:
+    play_active_loop_sound_1:
+      action: play
+      fade_in: 1s
+      loops: -1
+      
+  ball_starting{ball==2}:
+    play_active_loop_sound_1:
+      action: play
+      fade_in: 1s
+      loops: -1
+  ball_starting{ball==3}:
+    play_active_loop_sound_1:
+      action: play
+      fade_in: 1s
+      loops: -1
+  ball_ending:
+    play_active_loop_sound_1:
+      action: stop
+      fade_out: 1s
+      
+############# dropbanks ##########  
+
+
+  drop_target_bank_bank_lwr_down:
+    drop_bank_complete:
+      action: play
+      #fade_out: 1s
+      loops: 0
+  drop_target_bank_bank_upr_down:
+    drop_bank_complete:
+      action: play
+      #fade_out: 1s
+      loops: 0
+      
+      
+      
+      
+############### SOUNDS - END ###################
+      
+extra_balls:
+  extra_ball_eb:
+    award_events: logic_block_eb_award_done #extra_ball_award_achieved
+    max_per_game: 2
+    
+ball_saves:
+  shoot_again:
+    active_time: 10s
+    hurry_up_time: 4s
+    grace_period: 2s
+    enable_events:
+      #- stage_4_abc_lanes_complete
+      - timer_timer_down_ball_save_started
+      #- left_blue_trap_release_set
+      #- left_green_trap_release_set
+         
+    #timer_start_events: timer_timer_down_ball_save_started #balldevice_bd_plunger_ball_eject_success
+    auto_launch: true
+    balls_to_save: 1
+    eject_delay: 1s
+    #only_last_ball: true
+    
+    
+timers:    
+
+#  timer_down_start_video:
+#    start_value: 5
+#    end_value: 0
+#    direction: down
+#    tick_interval: 1s
+#    start_running: no
+#    control_events:
+#        - event: start_ball_starting_show
+#          action: start
+#        - event: timer_timer_down_start_video_complete
+#          action: reset
+  timer_down_ball_save:
+    start_value: 12
+    end_value: 0
+    direction: down
+    tick_interval: 1s
+    start_running: no
+    control_events:
+        - event: ball_starting #timer_timer_down_start_video_complete
+          action: start
+        - event: timer_timer_down_ball_save_complete
+          action: reset    
+    
+variable_player:
+ 
+  mode_base_started:
+    dp_music_value:
+      int: 0
+      action: set
+ 
+  player_score{value>=300000}:
+    dp_music_value:
+      int: 1
+      action: set
+      
+  DP_1_voice_ended:
+    dp_music_value:
+      int: 0
+      action: set
