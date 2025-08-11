@@ -1,0 +1,1328 @@
+#config_version=6
+
+lights:
+
+  #SERIAL LEDS (neopixels)
+  #NEO0 output supports 256 LEDs numbered 0-0-0 to 0-0-255
+
+  #OPP channels use the format: serial_chain-card_num-internal_index
+
+#This is mostly the same as numbers above except that internal_index = 3 * index. This is because serial LEDs are traditionally RGB (or GRB) LEDs with exactly three channels. However, this is not true for RGBW or similar LEDs which do not work with this style of numbering. Luckily, you can chain them instead and have MPF calculate the internal channels for you:
+
+#####  Special Note:  Channel 0 format for LED assignment rewritten in CHAIN format to be able
+##### to use both RGB and RGBW leds.  The pop bumpers use a RGBW disc with 8 leds.
+#####  NOT - Channel 1 is still using the older format for LED assignment since there are only RGB leds.
+
+#####  START OF J-11 SERIAL CHAIN #1 #####
+
+    l_led1:
+        start_channel: 0-0-0    # the exact number format depends on your platform
+        subtype: led
+        type: grbw    # will use green: 0-0, red: 0-1, blue: 0-2
+        tags: led_plyfld, led_lwr_rt_spec_wl #red
+        #Most WS2812-based LEDs are grb color order.
+                #This line not required for rgb ordered LEDs like the
+                #  WS2811 LEDs shown below
+    l_led2:
+        previous: l_led1
+        subtype: led
+        type: grbw   # will use red: 0-3, green: 0-4, blue: 0-5, white: 0-6
+        tags: led_plyfld, led_lwr_rt_e #green
+    l_led3:
+        previous: l_led2
+        subtype: led
+        type: grbw
+        tags: led_plyfld, led_shoot_again #orange
+    l_led4:
+        previous: l_led3
+        subtype: led
+        type: grbw
+        tags: led_plyfld, led_lwr_star_2 #orange
+    l_led5:
+        previous: l_led4
+        subtype: led
+        type: grbw
+        tags: led_plyfld, led_lwr_star_1 #orange
+    l_led6:
+        previous: l_led5
+        subtype: led
+        type: grbw
+        tags: led_plyfld, led_3x #green
+    l_led7:
+        previous: l_led6
+        subtype: led
+        type: grbw
+        tags: led_plyfld, led_2x #green
+    l_led8:
+        previous: l_led7
+        subtype: led
+        type: grbw
+        tags: led_plyfld, led_lwr_rt_d #green
+    l_led9:
+        previous: l_led8
+        subtype: led
+        type: grbw
+        tags: led_plyfld, led_lwr_lf_spec_wl #red
+    l_led10:
+        previous: l_led9
+        subtype: led
+        type: grbw
+        tags: led_plyfld, led_arrow_1 #red
+    l_led11:
+        previous: l_led10
+        subtype: led
+        type: grbw
+        tags: led_gi, led_target_1_gi
+    l_led12:
+        previous: l_led11
+        subtype: led
+        type: grbw
+        tags: led_plyfld, led_target_1_hit #orange
+    l_led13:
+        previous: l_led12
+        subtype: led
+        type: grbw
+        tags: led_plyfld, extra_ball_lane, led_kicker_1_10K #white
+    l_led14:
+        previous: l_led13
+        subtype: led
+        type: grbw
+        tags: led_plyfld, extra_ball_lane, led_kicker_2_15K #white
+    l_led15:
+        previous: l_led14
+        subtype: led
+        type: grbw
+        tags: led_plyfld, extra_ball_lane, led_kicker_3_extra_ball #orange
+    l_led16:
+        previous: l_led15
+        subtype: led
+        type: grbw
+        tags: led_gi, led_kicker #red
+    l_led17:
+        previous: l_led16
+        subtype: led
+        type: grbw
+        tags: led_plyfld, led_gar #white
+    l_led18:
+        previous: l_led17
+        subtype: led
+        type: grbw
+        tags: led_plyfld, led_5k_wl #orange
+    l_led19:
+        previous: l_led18
+        subtype: led
+        type: grbw
+        tags: led_plyfld, led_bns_adv_1, led_bns_adv #red
+    l_led20:
+        previous: l_led19
+        subtype: led
+        type: grbw
+        tags: led_plyfld, led_bns_adv_2, led_bns_adv #red
+    l_led21:
+        previous: l_led20
+        subtype: led
+        type: grbw
+        tags: led_plyfld, led_bns_adv_3, led_bns_adv #red
+    l_led22:
+        previous: l_led21
+        subtype: led
+        type: grbw
+        tags: led_plyfld, led_bns_adv_4, led_bns_adv #red
+    l_led23:
+        previous: l_led22
+        subtype: led
+        type: grbw
+        tags: led_plyfld, led_bns_adv_5, led_bns_adv #red
+    l_led24:
+        previous: l_led23
+        subtype: led
+        type: grbw
+        tags: led_plyfld, led_bns_adv_6, led_bns_adv #red
+    l_led25:
+        previous: l_led24
+        subtype: led
+        type: grbw
+        tags: led_plyfld, led_bns_adv_7, led_bns_adv #red
+    l_led26:
+        previous: l_led25
+        subtype: led
+        type: grbw
+        tags: led_plyfld, led_bns_adv_8, led_bns_adv #red
+    l_led27:
+        previous: l_led26
+        subtype: led
+        type: grbw
+        tags: led_plyfld, led_bns_adv_9, led_bns_adv #red
+    l_led28:
+        previous: l_led27
+        subtype: led
+        type: grbw
+        tags: led_plyfld, led_bns_adv_10, led_bns_adv #red
+    l_led29:
+        previous: l_led28
+        subtype: led
+        type: grbw
+        tags: led_plyfld, led_bns_adv_20, led_bns_adv #red
+    l_led30:
+        previous: l_led29
+        subtype: led
+        type: grbw
+        tags: led_plyfld, led_arrow_4 #red
+    l_led31:
+        previous: l_led30
+        subtype: led
+        type: grbw
+        tags: led_plyfld, led_arrow_3 #red
+    l_led32:
+        previous: l_led31
+        subtype: led
+        type: grbw
+        tags: led_plyfld, led_arrow_2 #red
+    l_led33:
+        previous: l_led32
+        subtype: led
+        type: grbw
+        tags: led_plyfld, led_target_2_hit #orange
+    l_led34:
+        previous: l_led33
+        subtype: led
+        type: grbw
+        tags: led_plyfld, led_target_3_hit #orange
+    l_led35:
+        previous: l_led34
+        subtype: led
+        type: grbw
+        tags: led_plyfld, led_target_4_hit #orange
+    l_led36:
+        previous: l_led35
+        subtype: led
+        type: grbw
+        tags: led_gi, led_target_4_gi
+    l_led37:
+        previous: l_led36
+        subtype: led
+        type: grbw
+        tags: led_gi, led_target_3_gi
+    l_led38:
+        previous: l_led37
+        subtype: led
+        type: grbw
+        tags: led_gi, led_target_2_gi
+    l_led39:
+        previous: l_led38
+        subtype: led
+        type: grbw
+        tags: led_plyfld, led_spinner_1k_wl #orange
+    ### 8 LED RGB STICK - CENTER DROP GAR TARGETS GI ###
+    l_led40:
+        previous: l_led39
+        subtype: led
+        type: grb
+        tags: led_gi, led_ctr_gar_drop_ambient
+    l_led41:
+        previous: l_led40
+        subtype: led
+        type: grb
+        tags: led_gi, led_ctr_gar_drop_ambient
+    l_led42:
+        previous: l_led41
+        subtype: led
+        type: grb
+        tags: led_gi, led_ctr_gar_drop_ambient
+    l_led43:
+        previous: l_led42
+        subtype: led
+        type: grb
+        tags: led_gi, led_ctr_gar_drop_ambient
+    l_led44:
+        previous: l_led43
+        subtype: led
+        type: grb
+        tags: led_gi, led_ctr_gar_drop_ambient
+    l_led45:
+        previous: l_led44
+        subtype: led
+        type: grb
+        tags: led_gi, led_ctr_gar_drop_ambient
+    l_led46:
+        previous: l_led45
+        subtype: led
+        type: grb
+        tags: led_gi, led_ctr_gar_drop_ambient
+    l_led47:
+        previous: l_led46
+        subtype: led
+        type: grb
+        tags: led_gi, led_ctr_gar_drop_ambient
+    ### 8 LED RGB STICK - CENTER DROP GAR TARGETS GI ### ----END
+    ### POP BUMBER LED DISC - LOWER ###
+    l_led48:
+        previous: l_led47
+        subtype: led
+        type: grbw
+        tags: led_pop_lwr_1, led_lwr_pop
+    l_led49:
+        previous: l_led48
+        subtype: led
+        type: grbw
+        tags: led_pop_lwr_2, led_lwr_pop
+    l_led50:
+        previous: l_led49
+        subtype: led
+        type: grbw
+        tags: led_pop_lwr_3, led_lwr_pop
+    l_led51:
+        previous: l_led50
+        subtype: led
+        type: grbw
+        tags: led_pop_lwr_4, led_lwr_pop
+    l_led52:
+        previous: l_led51
+        subtype: led
+        type: grbw
+        tags: led_pop_lwr_5, led_lwr_pop
+    l_led53:
+        previous: l_led52
+        subtype: led
+        type: grbw
+        tags: led_pop_lwr_6, led_lwr_pop
+    l_led54:
+        previous: l_led53
+        subtype: led
+        type: grbw
+        tags: led_pop_lwr_7, led_lwr_pop
+    l_led55:
+        previous: l_led54
+        subtype: led
+        type: grbw
+        tags: led_pop_lwr_8, led_lwr_pop
+    ### POP BUMBER LED DISC - LOWER ### --- END
+    ### POP BUMBER LED DISC - LEFT ###
+    l_led56:
+        previous: l_led55
+        subtype: led
+        type: grbw
+        tags: led_pop_lf_1, led_lf_pop
+    l_led57:
+        previous: l_led56
+        subtype: led
+        type: grbw
+        tags: led_pop_lf_2, led_lf_pop
+    l_led58:
+        previous: l_led57
+        subtype: led
+        type: grbw
+        tags: led_pop_lf_3, led_lf_pop
+    l_led59:
+        previous: l_led58
+        subtype: led
+        type: grbw
+        tags: led_pop_lf_4, led_lf_pop
+    l_led60:
+        previous: l_led59
+        subtype: led
+        type: grbw
+        tags: led_pop_lf_5, led_lf_pop
+    l_led61:
+        previous: l_led60
+        subtype: led
+        type: grbw
+        tags: led_pop_lf_6, led_lf_pop
+    l_led62:
+        previous: l_led61
+        subtype: led
+        type: grbw
+        tags: led_pop_lf_7, led_lf_pop
+    l_led63:
+        previous: l_led62
+        subtype: led
+        type: grbw
+        tags: led_pop_lf_8, led_lf_pop, led_pop
+    ### POP BUMBER LED DISC - LEFT ### --- END
+    ### POP BUMBER LED DISC - RIGHT ###
+    l_led64:
+        previous: l_led63
+        subtype: led
+        type: grbw
+        tags: led_pop_rt_1, led_rt_pop
+    l_led65:
+        previous: l_led64
+        subtype: led
+        type: grbw
+        tags: led_pop_rt_2, led_rt_pop
+    l_led66:
+        previous: l_led65
+        subtype: led
+        type: grbw
+        tags: led_pop_rt_3, led_rt_pop
+    l_led67:
+        previous: l_led66
+        subtype: led
+        type: grbw
+        tags: led_pop_rt_4, led_rt_pop
+    l_led68:
+        previous: l_led67
+        subtype: led
+        type: grbw
+        tags: led_pop_rt_5, led_rt_pop
+    l_led69:
+        previous: l_led68
+        subtype: led
+        type: grbw
+        tags: led_pop_rt_6, led_rt_pop
+    l_led70:
+        previous: l_led69
+        subtype: led
+        type: grbw
+        tags: led_pop_rt_7, led_rt_pop
+    l_led71:
+        previous: l_led70
+        subtype: led
+        type: grbw
+        tags: led_pop_rt_8, led_rt_pop
+    ### POP BUMBER LED DISC - RIGHT ### --- END
+    l_led72:
+        previous: l_led71
+        subtype: led
+        type: grbw
+        tags: led_plyfld, led_snake_50k, led_snake #green
+    l_led73:
+        previous: l_led72
+        subtype: led
+        type: grbw
+        tags: led_plyfld, led_snake_30k, led_snake #green
+    l_led74:
+        previous: l_led73
+        subtype: led
+        type: grbw
+        tags: led_plyfld, led_snake_20k, led_snake #green
+    l_led75:
+        previous: l_led74
+        subtype: led
+        type: grbw
+        tags: led_plyfld, led_snake_10k, led_snake #green
+    l_led76:
+        previous: l_led75
+        subtype: led
+        type: grbw
+        tags: led_plyfld, led_snake_5k, led_snake #green
+    l_led77:
+        previous: l_led76
+        subtype: led
+        type: grbw
+        tags: led_plyfld, led_gor #white
+### 8 LED RGB STICK  - UPPER GOR DROP GI ###
+    l_led78:
+        previous: l_led77
+        subtype: led
+        type: grb
+        tags: led_gi, led_upr_gor_drop_ambient
+    l_led79:
+        previous: l_led78
+        subtype: led
+        type: grb
+        tags: led_gi, led_upr_gor_drop_ambient
+    l_led80:
+        previous: l_led79
+        subtype: led
+        type: grb
+        tags: led_gi, led_upr_gor_drop_ambient
+    l_led81:
+        previous: l_led80
+        subtype: led
+        type: grb
+        tags: led_gi, led_upr_gor_drop_ambient
+    l_led82:
+        previous: l_led81
+        subtype: led
+        type: grb
+        tags: led_gi, led_upr_gor_drop_ambient
+    l_led83:
+        previous: l_led82
+        subtype: led
+        type: grb
+        tags: led_gi, led_upr_gor_drop_ambient
+    l_led84:
+        previous: l_led83
+        subtype: led
+        type: grb
+        tags: led_gi, led_upr_gor_drop_ambient
+    l_led85:
+        previous: l_led84
+        subtype: led
+        type: grb
+        tags: led_gi, led_upr_gor_drop_ambient
+### 8 LED RGB STICK  - UPPER GOR DROP GI ###  --- END
+    l_led86:
+        previous: l_led85
+        subtype: led
+        type: grbw
+        tags: led_plyfld, led_a, abc_lanes #green
+    l_led87:
+        previous: l_led86
+        subtype: led
+        type: grbw
+        tags: led_plyfld, led_b, abc_lanes #green
+    l_led88:
+        previous: l_led87
+        subtype: led
+        type: grbw
+        tags: led_plyfld, led_c, abc_lanes #green
+    l_led89:
+        previous: l_led88
+        subtype: led
+        type: rgb
+        tags: led_gi, led_upr_rt_clane_gi
+    l_led90:
+        previous: l_led89
+        subtype: led
+        type: rgb
+        tags: led_gi, led_upr_lf_clane_gi
+    l_led91:
+        previous: l_led90
+        subtype: led
+        type: rgb
+        tags: led_gi, led_upr_lf_blane_gi
+    l_led92:
+        previous: l_led91
+        subtype: led
+        type: rgb
+        tags: led_gi, led_upr_lf_alane_gi
+    l_led93:
+        previous: l_led92
+        subtype: led
+        type: rgb
+        tags: led_gi, led_upr_lf_alane2_gi
+### 3 LED STRIP - UPPER LEFT BACK
+    l_led94:
+        previous: l_led93
+        subtype: led
+        type: grb
+        tags: led_gi, led_upr_lf_strip_gi, led_upr_lf_strip_1_gi
+    l_led95:
+        previous: l_led94
+        subtype: led
+        type: grb
+        tags: led_gi, led_upr_lf_strip_gi, led_upr_lf_strip_2_gi
+    l_led96:
+        previous: l_led95
+        subtype: led
+        type: grb
+        tags: led_gi, led_upr_lf_strip_gi, led_upr_lf_strip_3_gi
+### 3 LED STRIP - UPPER LEFT BACK --- END ###
+    l_led97:
+        previous: l_led96
+        subtype: led
+        type: grbw
+        tags: led_plyfld, led_warrior_1, led_pit, led_warriors
+    l_led98:
+        previous: l_led97
+        subtype: led
+        type: grbw
+        tags: led_plyfld, led_warrior_2, led_pit, led_warriors
+    l_led99:
+        previous: l_led98
+        subtype: led
+        type: grbw
+        tags: led_plyfld, led_warrior_3, led_warriors
+    l_led100:
+        previous: l_led99
+        subtype: led
+        type: grbw
+        tags: led_plyfld, led_warrior_4, led_warriors
+### 3 LED STRIP - UPPER RIGHT BACK
+    l_led101:
+        previous: l_led100
+        subtype: led
+        type: grb
+        tags: led_gi, led_upr_rt_strip_gi, led_upr_rt_strip_1_gi, led_pit
+    l_led102:
+        previous: l_led101
+        subtype: led
+        type: grb
+        tags: led_gi, led_upr_rt_strip_gi, led_upr_rt_strip_2_gi, led_pit
+    l_led103:
+        previous: l_led102
+        subtype: led
+        type: grb
+        tags: led_gi, led_upr_rt_strip_gi, led_upr_rt_strip_3_gi, led_pit
+### 3 LED STRIP - UPPER RIGHT BACK  ---END
+    l_led104:
+        previous: l_led103
+        subtype: led
+        type: rgb
+        tags: led_gi, led_upr_rt_snake_pit_giv
+    l_led105:
+        previous: l_led104
+        subtype: led
+        type: rgb
+        tags: led_gi, led_upr_mid_snake_pit_gi, led_pit
+    l_led106:
+        previous: l_led105
+        subtype: led
+        type: rgb
+        tags: led_gi, led_upr_lf_snake_pit_gi, led_pit
+    l_led107:
+        previous: l_led106
+        subtype: led
+        type: rgb
+        tags: led_gi, led_upr_lwr_lf_snake_pit_gi, led_pit
+    l_led108:
+        previous: l_led107
+        subtype: led
+        type: rgb
+        tags: led_gi, led_upr_lf_gi
+    l_led109:
+        previous: l_led108
+        subtype: led
+        type: rgb
+        tags: led_gi, led_upr_lf_gi
+    l_led110:
+        previous: l_led109
+        subtype: led
+        type: rgb
+        tags: led_gi, led_upr_lf_gi
+    l_led111:
+        previous: l_led110
+        subtype: led
+        type: rgb
+        tags: led_gi, led_upr_lf_gi
+    l_led112:
+        previous: l_led111
+        subtype: led
+        type: rgb
+        tags: led_gi, led_upr_lf_gi
+    l_led113:
+        previous: l_led112
+        subtype: led
+        type: rgb
+        tags: led_gi, led_upr_lf_sling_gi
+    l_led114:
+        previous: l_led113
+        subtype: led
+        type: rgb
+        tags: led_gi, led_lwr_lf_sling_gi
+    l_led115:
+        previous: l_led114
+        subtype: led
+        type: rgb
+        tags: led_gi, led_upr_lf_drain_gi
+    l_led116:
+        previous: l_led115
+        subtype: led
+        type: rgb
+        tags: led_gi, led_apron_credit
+    l_led117:
+        previous: l_led116
+        subtype: led
+        type: grbw
+        tags: led_gi, led_apron_drain
+    l_led118:
+        previous: l_led117
+        subtype: led
+        type: rgb
+        tags: led_gi, led_apron_shooter_lane
+    l_led119:
+        previous: l_led118
+        subtype: led
+        type: rgb
+        tags: led_gi, led_upr_rt_drain_gi
+    l_led120:
+        previous: l_led119
+        subtype: led
+        type: rgb
+        tags: led_gi, led_lwr_rt_sling_gi
+    l_led121:
+        previous: l_led120
+        subtype: led
+        type: rgb
+        tags: led_gi, led_upr_rt_sling_gi
+    l_led122:
+        previous: l_led121
+        subtype: led
+        type: rgb
+        tags: led_gi, led_upr_rt_gi
+    l_led123:
+        previous: l_led122
+        subtype: led
+        type: rgb
+        tags: led_gi, led_upr_rt_gi
+    l_led124:
+        previous: l_led123
+        subtype: led
+        type: rgb
+        tags: led_gi, led_ctr_drop_gi
+    l_led125:
+        previous: l_led124
+        subtype: led
+        type: rgb
+        tags: led_gi, led_upr_top_mid_rt_gi
+    l_led126:
+        previous: l_led125
+        subtype: led
+        type: rgb
+        tags: led_gi, led_upr_top_rt_gi
+    l_led127:
+        previous: l_led126
+        subtype: led
+        type: rgb
+        tags: gi, led_gi, led_upr_top_rt_gi
+        
+### END OF PLAYFIELD LEDS ###
+        
+    ###  START BLADE LEFT ###    
+        
+    l_led128:
+        previous: l_led127
+        subtype: led
+        type: gbr
+        tags: led_blade_left
+    l_led129:
+        previous: l_led128
+        subtype: led
+        type: gbr
+        tags: led_blade_left
+    l_led130:
+        previous: l_led129
+        subtype: led
+        type: gbr
+        tags: led_blade_left
+    l_led131:
+        previous: l_led130
+        subtype: led
+        type: gbr
+        tags: led_blade_left
+    l_led132:
+        previous: l_led131
+        subtype: led
+        type: gbr
+        tags: led_blade_left
+    l_led133:
+        previous: l_led132
+        subtype: led
+        type: gbr
+        tags: led_blade_left
+    l_led134:
+        previous: l_led133
+        subtype: led
+        type: gbr
+        tags: led_blade_left
+    l_led135:
+        previous: l_led134
+        subtype: led
+        type: gbr
+        tags: led_blade_left
+    l_led136:
+        previous: l_led135
+        subtype: led
+        type: gbr
+        tags: led_blade_left
+    l_led137:
+        previous: l_led136
+        subtype: led
+        type: gbr
+        tags: led_blade_left
+    l_led138:
+        previous: l_led137
+        subtype: led
+        type: gbr
+        tags: led_blade_left
+    l_led139:
+        previous: l_led138
+        subtype: led
+        type: gbr
+        tags: led_blade_left
+    l_led140:
+        previous: l_led139
+        subtype: led
+        type: gbr
+        tags: led_blade_left
+    l_led141:
+        previous: l_led140
+        subtype: led
+        type: gbr
+        tags: led_blade_left
+    l_led142:
+        previous: l_led141
+        subtype: led
+        type: gbr
+        tags: led_blade_left
+    l_led143:
+        previous: l_led142
+        subtype: led
+        type: gbr
+        tags: led_blade_left
+    l_led144:
+        previous: l_led143
+        subtype: led
+        type: gbr
+        tags: led_blade_left
+    l_led145:
+        previous: l_led144
+        subtype: led
+        type: gbr
+        tags: led_blade_left
+    l_led146:
+        previous: l_led145
+        subtype: led
+        type: gbr
+        tags: led_blade_left
+    l_led147:
+        previous: l_led146
+        subtype: led
+        type: gbr
+        tags: led_blade_left
+    l_led148:
+        previous: l_led147
+        subtype: led
+        type: gbr
+        tags: led_blade_left
+    l_led149:
+        previous: l_led148
+        subtype: led
+        type: gbr
+        tags: led_blade_left
+    l_led150:
+        previous: l_led149
+        subtype: led
+        type: gbr
+        tags: led_blade_left
+    l_led151:
+        previous: l_led150
+        subtype: led
+        type: gbr
+        tags: led_blade_left
+    l_led152:
+        previous: l_led151
+        subtype: led
+        type: gbr
+        tags: led_blade_left
+    l_led153:
+        previous: l_led152
+        subtype: led
+        type: gbr
+        tags: led_blade_left
+    l_led154:
+        previous: l_led153
+        subtype: led
+        type: gbr
+        tags: led_blade_left
+    l_led155:
+        previous: l_led154
+        subtype: led
+        type: gbr
+        tags: led_blade_left
+    l_led156:
+        previous: l_led155
+        subtype: led
+        type: gbr
+        tags: led_blade_left
+    l_led157:
+        previous: l_led156
+        subtype: led
+        type: gbr
+        tags: led_blade_left
+    l_led158:
+        previous: l_led157
+        subtype: led
+        type: gbr
+        tags: led_blade_left
+    l_led159:
+        previous: l_led158
+        subtype: led
+        type: gbr
+        tags: led_blade_left, led_mezal_left
+    l_led160:
+        previous: l_led159
+        subtype: led
+        type: gbr
+        tags: led_blade_left, led_mezal_left
+    l_led161:
+        previous: l_led160
+        subtype: led
+        type: gbr
+        tags: led_blade_left, led_mezal_left
+
+
+### LEFT BLADE - END ###
+
+    ###  START BLADE RIGHT ###    
+        
+    l_led162:
+        previous: l_led161
+        subtype: led
+        type: gbr
+        tags: led_blade_right
+    l_led163:
+        previous: l_led162
+        subtype: led
+        type: gbr
+        tags: led_blade_right
+    l_led164:
+        previous: l_led163
+        subtype: led
+        type: gbr
+        tags: led_blade_right
+    l_led165:
+        previous: l_led164
+        subtype: led
+        type: gbr
+        tags: led_blade_right
+    l_led166:
+        previous: l_led165
+        subtype: led
+        type: gbr
+        tags: led_blade_right
+    l_led167:
+        previous: l_led166
+        subtype: led
+        type: gbr
+        tags: led_blade_right
+    l_led168:
+        previous: l_led167
+        subtype: led
+        type: gbr
+        tags: led_blade_right
+
+    l_led169:
+        previous: l_led168
+        subtype: led
+        type: gbr
+        tags: led_blade_right
+    l_led170:
+        previous: l_led169
+        subtype: led
+        type: gbr
+        tags: led_blade_right
+    l_led171:
+        previous: l_led170
+        subtype: led
+        type: gbr
+        tags: led_blade_right
+    l_led172:
+        previous: l_led171
+        subtype: led
+        type: gbr
+        tags: led_blade_right
+    l_led173:
+        previous: l_led172
+        subtype: led
+        type: gbr
+        tags: led_blade_right
+    l_led174:
+        previous: l_led173
+        subtype: led
+        type: gbr
+        tags: led_blade_right
+    l_led175:
+        previous: l_led174
+        subtype: led
+        type: gbr
+        tags: led_blade_right
+    l_led176:
+        previous: l_led175
+        subtype: led
+        type: gbr
+        tags: led_blade_right
+    l_led177:
+        previous: l_led176
+        subtype: led
+        type: gbr
+        tags: led_blade_right
+    l_led178:
+        previous: l_led177
+        subtype: led
+        type: gbr
+        tags: led_blade_right
+    l_led179:
+        previous: l_led178
+        subtype: led
+        type: gbr
+        tags: led_blade_right
+    l_led180:
+        previous: l_led179
+        subtype: led
+        type: gbr
+        tags: led_blade_right
+    l_led181:
+        previous: l_led180
+        subtype: led
+        type: gbr
+        tags: led_blade_right
+    l_led182:
+        previous: l_led181
+        subtype: led
+        type: gbr
+        tags: led_blade_right
+    l_led183:
+        previous: l_led182
+        subtype: led
+        type: gbr
+        tags: led_blade_right
+    l_led184:
+        previous: l_led183
+        subtype: led
+        type: gbr
+        tags: led_blade_right
+    l_led185:
+        previous: l_led184
+        subtype: led
+        type: gbr
+        tags: led_blade_right
+    l_led186:
+        previous: l_led185
+        subtype: led
+        type: gbr
+        tags: led_blade_right
+    l_led187:
+        previous: l_led186
+        subtype: led
+        type: gbr
+        tags: led_blade_right
+    l_led188:
+        previous: l_led187
+        subtype: led
+        type: gbr
+        tags: led_blade_right
+    l_led189:
+        previous: l_led188
+        subtype: led
+        type: gbr
+        tags: led_blade_right
+    l_led190:
+        previous: l_led189
+        subtype: led
+        type: gbr
+        tags: led_blade_right
+    l_led191:
+        previous: l_led190
+        subtype: led
+        type: gbr
+        tags: led_blade_right
+    l_led192:
+        previous: l_led191
+        subtype: led
+        type: gbr
+        tags: led_blade_right
+    l_led193:
+        previous: l_led192
+        subtype: led
+        type: gbr
+        tags: led_blade_right, led_mezal_right
+    l_led194:
+        previous: l_led193
+        subtype: led
+        type: gbr
+        tags: led_blade_right, led_mezal_right
+    l_led195:
+        previous: l_led194
+        subtype: led
+        type: gbr
+        tags: led_blade_right, led_mezal_right
+
+
+### RIGHT BLADE - END ###
+#####  END OF J-11 SERIAL CHAIN #1 #####
+
+### BACK BOX - START ###
+#####  Start OF J-12 SERIAL CHAIN #2 #####
+
+    l_bb_gi_1:
+        number: 1-0-0
+        subtype: led
+        type: rgb
+        tags: bb_gi  #lower left arm red
+    l_bb_gi_2:
+        number: 1-0-1
+        subtype: led
+        type: rgb
+        tags: bb_gi_blue #bb_p2   #lower left tree blue
+    l_bb_gi_3:
+        number: 1-0-2
+        subtype: led
+        type: rgb
+        tags: bb_gi    #lower left chest bones yellow
+    l_bb_gi_4:
+        number: 1-0-3
+        subtype: led
+        type: rgb
+        tags: bb_game_over    #game over
+    l_bb_gi_5:
+        number: 1-0-4
+        subtype: led
+        type: rgb
+        tags: bb_game_over    #game over
+    l_bb_gi_6:
+        number: 1-0-5
+        subtype: led
+        type: rgb
+        tags: bb_ball_in_play      #ball in play
+    l_bb_gi_7:
+        number: 1-0-6
+        subtype: led
+        type: rgb
+        tags: bb_match     #match
+    l_bb_gi_8:
+        number: 1-0-7
+        subtype: led
+        type: rgb
+        tags: bb_shoot_again    #shoot again
+    l_bb_gi_9:
+        number: 1-0-8
+        subtype: led
+        type: rgb
+        tags: bb_shoot_again    #shoot again
+    l_bb_gi_10:
+        number: 1-0-9
+        subtype: led
+        type: rgb
+        tags: bb_gi_blue    #1 to 4 can play
+    l_bb_gi_11:
+        number: 1-0-10
+        subtype: led
+        type: rgb
+        tags: bb_p1  #player 1
+    l_bb_gi_12:
+        number: 1-0-11
+        subtype: led
+        type: rgb
+        tags: bb_p2  #player 2
+    l_bb_gi_13:
+        number: 1-0-12
+        subtype: led
+        type: rgb
+        tags: bb_p3  #player 3
+    l_bb_gi_14:
+        number: 1-0-13
+        subtype: led
+        type: rgb
+        tags: bb_p4  #player 4
+    l_bb_gi_15:
+        number: 1-0-14
+        subtype: led
+        type: rgb
+        tags: bb_tilt
+    l_bb_gi_16:
+        number: 1-0-15
+        subtype: led
+        type: rgb
+        tags: bb_gi    #lower left skull
+    l_bb_gi_17:
+        number: 1-0-16
+        subtype: led
+        type: rgb
+        tags: bb_gi_blue   #lower left skull blue
+    l_bb_gi_18:
+        number: 1-0-17
+        subtype: led
+        type: rgb
+        tags: bb_gi, bb_4th_player  #4th player
+    l_bb_gi_19:
+        number: 1-0-18
+        subtype: led
+        type: rgb
+        tags: bb_gi_green   #right snake green
+    l_bb_gi_20:
+        number: 1-0-19
+        subtype: led
+        type: rgb
+        tags: bb_gi_red  #right snake mouth red
+    l_bb_gi_21:
+        number: 1-0-20
+        subtype: led
+        type: rgb
+        tags: bb_gi   #woman arm pit
+    l_bb_gi_22:
+        number: 1-0-21
+        subtype: led
+        type: rgb
+        tags: bb_gi    #woman waist
+    l_bb_gi_23:
+        number: 1-0-22
+        subtype: led
+        type: rgb
+        tags: bb_gi    #woman upper leg
+    l_bb_gi_24:
+        number: 1-0-23
+        subtype: led
+        type: rgb
+        tags: bb_gi    #woman lower leg
+    l_bb_gi_25:
+        number: 1-0-24
+        subtype: led
+        type: rgb
+        tags: bb_gi    #left middle skulls
+    l_bb_gi_26:
+        number: 1-0-25
+        subtype: led
+        type: rgb
+        tags: bb_gi_blue    #left middle gorgar
+    l_bb_gi_27:
+        number: 1-0-26
+        subtype: led
+        type: rgb
+        tags: bb_gi_green   # left middle man green
+    l_bb_gi_28:
+        number: 1-0-27
+        subtype: led
+        type: rgb
+        tags: bb_gi  #left middle man
+    l_bb_gi_29:
+        number: 1-0-28
+        subtype: led
+        type: rgb
+        tags: bb_gi_green  #left middle man upper green
+    l_bb_gi_30:
+        number: 1-0-29
+        subtype: led
+        type: rgb
+        tags: bb_gi    #man left leg
+    l_bb_gi_31:
+        number: 1-0-30
+        subtype: led
+        type: rgb
+        tags: bb_gi   #man chest
+    l_bb_gi_32:
+        number: 1-0-31
+        subtype: led
+        type: rgb
+        tags: bb_gi, bb_gorgar    #Gorgar right forearm
+    l_bb_gi_33:
+        number: 1-0-32
+        subtype: led
+        type: rgb
+        tags: bb_gi_blue    #right upper rock blue
+    l_bb_gi_34:
+        number: 1-0-33
+        subtype: led
+        type: rgb
+        tags: bb_gi, bb_3rd_player  #3rd player
+    l_bb_gi_35:
+        number: 1-0-34
+        subtype: led
+        type: rgb
+        tags: bb_gi, bb_2nd_player  #2nd player pink
+    l_bb_gi_36:
+        number: 1-0-35
+        subtype: led
+        type: rgb
+        tags: bb_title    #R green
+    l_bb_gi_37:
+        number: 1-0-36
+        subtype: led
+        type: rgb
+        tags: bb_title    #A green
+    l_bb_gi_38:
+        number: 1-0-37
+        subtype: led
+        type: rgb
+        tags: bb_title    #G green
+    l_bb_gi_39:
+        number: 1-0-38
+        subtype: led
+        type: rgb
+        tags: bb_title    #R green
+    l_bb_gi_40:
+        number: 1-0-39
+        subtype: led
+        type: rgb
+        tags: bb_gi    #upper right skull face
+    l_bb_gi_41:
+        number: 1-0-40  
+        subtype: led
+        type: rgb
+        tags: bb_title    #O green
+    l_bb_gi_42:
+        number: 1-0-41
+        subtype: led
+        type: rgb
+        tags: bb_title    #G green
+    l_bb_gi_43:
+        number: 1-0-42
+        subtype: led
+        type: rgb
+        tags: bb_gorgar    #upper Gorgar face
+    l_bb_gi_44:
+        number: 1-0-43
+        subtype: led
+        type: rgb
+        tags: bb_gorgar    #upper Gorgar face cheek
+    l_bb_gi_45:
+        number: 1-0-44
+        subtype: led
+        type: rgb
+        tags: bb_gorgar    #left Gorgar shoulder
+    l_bb_gi_46:
+        number: 1-0-45
+        subtype: led
+        type: rgb
+        tags: bb_gi_blue    #left upper wall
+    l_bb_gi_47:
+        number: 1-0-46
+        subtype: led
+        type: rgb
+        tags: bb_gi_red   #left top mountain red
+    l_bb_gi_48:
+        number: 1-0-47
+        subtype: led
+        type: rgb
+        tags: bb_hi_score  #high score
+    l_bb_gi_49:
+        number: 1-0-48
+        subtype: led
+        type: rgb
+        tags: bb_gi_green   #left top tree green
+    l_bb_gi_50:
+        number: 1-0-49
+        subtype: led
+        type: rgb
+        tags: bb_gi_red  #iams
+    l_bb_gi_51:
+        number: 1-0-50
+        subtype: led
+        type: rgb
+        tags: bb_gi_red  #Will
+    l_bb_gi_52:
+        number: 1-0-51
+        subtype: led
+        type: rgb
+        tags: bb_gi, bb_1st_player  #1st player white
+    l_bb_gi_53:
+        number: 1-0-52
+        subtype: led
+        type: rgb
+        tags: bb_gorgar    #left Gorgar bicep
+    l_bb_gi_54:
+        number: 1-0-53
+        subtype: led
+        type: rgb
+        tags: bb_gorgar    #left Gorgar abs
+    l_bb_gi_55:
+        number: 1-0-54
+        subtype: led
+        type: rgb
+        tags: bb_gorgar    #left Gorgar chest
+    l_bb_gi_56:
+        number: 1-0-55
+        subtype: led
+        type: rgb
+        tags: bb_gi, bb_gorgar    #right Gorgar shoulder
+    l_bb_gi_57:
+        number: 1-0-56
+        subtype: led
+        type: rgb
+        tags: bb_gi_blue   #right upper wall blue
+    l_bb_gi_58:
+        number: 1-0-57
+        subtype: led
+        type: rgb
+        tags: bb_gi_blue  #right upper wall (lwr) blue
+    l_bb_gi_59:
+        number: 1-0-58
+        subtype: led
+        type: rgb
+        tags: bb_gorgar    #right Gorgar bicep
+        
+        
+ 
+#####  END OF J-12 SERIAL CHAIN #2 #####
